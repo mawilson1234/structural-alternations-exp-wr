@@ -66,7 +66,7 @@ Sequence(
 	randomize("trial_train_rep3"), 'post-training',
 	randomize("trial_train_rep4"), 'post-training',
 	"instruction3",
-	sepWithN('break', randomize("trial"), 57),
+	sepWithN('break', randomize("trial"), 27),
 	"feedback",
 	SendResults(),
 	"bye"
@@ -355,7 +355,7 @@ Template("train.csv", feedback_trial('trial_train'))
 Template("train_rep1.csv", feedback_trial('trial_train_rep1'))
 Template("train_rep2.csv", feedback_trial('trial_train_rep2'))
 Template("train_rep1.csv", feedback_trial('trial_train_rep3'))
-Template("train_rep1.csv", feedback_trial('trial_train_rep4'))
+Template("train_rep2.csv", feedback_trial('trial_train_rep4'))
 
 newTrial("instruction3",
 	newText(
