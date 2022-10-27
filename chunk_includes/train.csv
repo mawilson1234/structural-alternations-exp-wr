@@ -1,25 +1,31 @@
 item,sentence,sentence_type,group,word,target_response,adverb
-prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,pearl,[subj],always
-prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive,white_red,sheep,[subj],typically
-prac,The [subj] has typically blorked the [obj].,perfect transitive,white_red,onion,[subj],typically
-prac,"Despite George's best efforts, the [subj] has usually blorked the [obj].",perfect transitive,white_red,milk,[subj],usually
-prac,I'm surprised that the [subj] has never blorked the [obj].,perfect transitive,white_red,lobster,[obj],never
-prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,blood,[obj],rarely
-prac,"Because the [subj] has usually blorked the [obj], I'm satisfied.",perfect transitive,white_red,tomato,[obj],usually
-prac,The [subj] has always blorked the [obj] when Chris is in town.,perfect transitive,white_red,ruby,[obj],always
-prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,ruby,[obj],always
-prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive,white_red,tomato,[obj],typically
-prac,The [subj] has typically blorked the [obj].,perfect transitive,white_red,blood,[obj],typically
-prac,"Despite George's best efforts, the [subj] has usually blorked the [obj].",perfect transitive,white_red,lobster,[obj],usually
-prac,I'm surprised that the [subj] has never blorked the [obj].,perfect transitive,white_red,milk,[subj],never
-prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,onion,[subj],rarely
-prac,"Because the [subj] has usually blorked the [obj], I'm satisfied.",perfect transitive,white_red,sheep,[subj],usually
-prac,The [subj] has always blorked the [obj] when Chris is in town.,perfect transitive,white_red,pearl,[subj],always
-prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,onion,[subj],always
-prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive,white_red,milk,[subj],typically
-prac,The [subj] has typically blorked the [obj].,perfect transitive,white_red,lobster,[obj],typically
-prac,"Despite George's best efforts, the [subj] has usually blorked the [obj].",perfect transitive,white_red,blood,[obj],usually
-prac,I'm surprised that the [subj] has never blorked the [obj].,perfect transitive,white_red,tomato,[obj],never
-prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,ruby,[obj],rarely
+prac,It is the [obj] that the [subj] has always blorked.,cleft object perfect transitive,white_red,blood,[obj],always
+prac,It is the [obj] that the [subj] has always blorked.,cleft object perfect transitive,white_red,ruby,[obj],always
+prac,It is the [obj] that the [subj] has always blorked.,cleft object perfect transitive,white_red,milk,[subj],always
 prac,"Because the [subj] has usually blorked the [obj], I'm satisfied.",perfect transitive,white_red,pearl,[subj],usually
+prac,"Because the [subj] has usually blorked the [obj], I'm satisfied.",perfect transitive,white_red,sheep,[subj],usually
+prac,"Because the [subj] has usually blorked the [obj], I'm satisfied.",perfect transitive,white_red,tomato,[obj],usually
+prac,"Despite George's best efforts, the [subj] has usually blorked the [obj].",perfect transitive,white_red,blood,[obj],usually
+prac,"Despite George's best efforts, the [subj] has usually blorked the [obj].",perfect transitive,white_red,lobster,[obj],usually
+prac,"Despite George's best efforts, the [subj] has usually blorked the [obj].",perfect transitive,white_red,milk,[subj],usually
+prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive,white_red,milk,[subj],typically
+prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive,white_red,sheep,[subj],typically
+prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive,white_red,tomato,[obj],typically
+prac,I'm surprised that the [subj] has never blorked the [obj].,perfect transitive,white_red,lobster,[obj],never
+prac,I'm surprised that the [subj] has never blorked the [obj].,perfect transitive,white_red,milk,[subj],never
+prac,I'm surprised that the [subj] has never blorked the [obj].,perfect transitive,white_red,tomato,[obj],never
+prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,blood,[obj],rarely
+prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,onion,[subj],rarely
+prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,ruby,[obj],rarely
+prac,The [subj] has always blorked the [obj] when Chris is in town.,perfect transitive,white_red,pearl,[subj],always
+prac,The [subj] has always blorked the [obj] when Chris is in town.,perfect transitive,white_red,ruby,[obj],always
 prac,The [subj] has always blorked the [obj] when Chris is in town.,perfect transitive,white_red,sheep,[subj],always
+prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,onion,[subj],always
+prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,pearl,[subj],always
+prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,ruby,[obj],always
+prac,The [subj] has typically blorked the [obj].,perfect transitive,white_red,blood,[obj],typically
+prac,The [subj] has typically blorked the [obj].,perfect transitive,white_red,lobster,[obj],typically
+prac,The [subj] has typically blorked the [obj].,perfect transitive,white_red,onion,[subj],typically
+prac,That's the [obj] that the [subj] has often blorked.,presentational ORC perfect transitive,white_red,tomato,[obj],often
+prac,That's the [obj] that the [subj] has often blorked.,presentational ORC perfect transitive,white_red,pearl,[subj],often
+prac,That's the [obj] that the [subj] has often blorked.,presentational ORC perfect transitive,white_red,onion,[subj],often
