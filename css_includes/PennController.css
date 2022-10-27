@@ -1,0 +1,11 @@
+.PennController {
+    width: 45em !important; /* controls the width of the content area */
+    margin-left: calc(50vw - 22.5em); /* aligns the content area's left edge with the vertical center of the page */
+    font-size: 14pt;
+}
+
+.button{
+    font-size: 14pt;
+    margin-bottom: 5em;
+    margin-top: 2em;
+}

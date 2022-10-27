@@ -1,0 +1,11 @@
+joblogs/
+
+analysis/Models/
+analysis/Models
+analysis/Plots/
+analysis/Plots
+analysis/results*
+
+scripts/backup-power-analysis.sh
+scripts/backup.sh
+scripts/*/*.txt

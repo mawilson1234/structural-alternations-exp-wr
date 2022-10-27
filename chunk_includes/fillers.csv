@@ -1,0 +1,51 @@
+item,sentence,sentence_type,filler_group,word_0,word_1,word_2,word_3,word_4,word_5,word_6,word_7,word_8,word_9,word_10,word_11,adverb
+121,The [subj] has always eaten the [obj].,perfect transitive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,always
+122,The [subj] seems to have often eaten the [obj].,raising perfect transitive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,often
+123,It is the [subj] that has usually eaten the [obj].,cleft subject perfect transitive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,usually
+124,The [subj] hasn't typically eaten the [obj].,neg perfect transitive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,typically
+125,It is the [subj] that seems to have always eaten the [obj].,cleft subject raising perfect transitive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,always
+126,The [obj] has often been eaten by the [subj].,perfect passive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,often
+127,The [obj] seems to have usually been eaten by the [subj].,raising perfect passive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,usually
+128,It is the [obj] that has typically been eaten by the [subj].,cleft subject perfect passive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,typically
+129,The [obj] hasn't always been eaten by the [subj].,neg perfect passive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,always
+130,It is the [obj] that seems to have often been eaten by the [subj].,cleft subject raising perfect passive,eat,person,guest,child,customer,patient,king,pizza,orange,steak,bread,sandwich,dessert,often
+131,The [subj] has often regretted the [obj].,perfect transitive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,often
+132,The [subj] seems to have usually regretted the [obj].,raising perfect transitive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,usually
+133,It is the [subj] that has typically regretted the [obj].,cleft subject perfect transitive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,typically
+134,The [subj] hasn't always regretted the [obj].,neg perfect transitive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,always
+135,It is the [subj] that seems to have often regretted the [obj].,cleft subject raising perfect transitive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,often
+136,The [obj] has usually been regretted by the [subj].,perfect passive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,usually
+137,The [obj] seems to have typically been regretted by the [subj].,raising perfect passive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,typically
+138,It is the [obj] that has always been regretted by the [subj].,cleft subject perfect passive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,always
+139,The [obj] hasn't often been regretted by the [subj].,neg perfect passive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,often
+140,It is the [obj] that seems to have usually been regretted by the [subj].,cleft subject raising perfect passive,regret,prince,president,client,author,committee,chancellor,choice,error,decision,statement,purchase,incident,usually
+141,The [subj] has usually read the [obj].,perfect transitive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,usually
+142,The [subj] seems to have typically read the [obj].,raising perfect transitive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,typically
+143,It is the [subj] that has always read the [obj].,cleft subject perfect transitive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,always
+144,The [subj] hasn't often read the [obj].,neg perfect transitive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,often
+145,It is the [subj] that seems to have usually read the [obj].,cleft subject raising perfect transitive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,usually
+146,The [obj] has typically been read by the [subj].,perfect passive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,typically
+147,The [obj] seems to have always been read by the [subj].,raising perfect passive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,always
+148,It is the [obj] that has often been read by the [subj].,cleft subject perfect passive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,often
+149,The [obj] hasn't usually been read by the [subj].,neg perfect passive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,usually
+150,It is the [obj] that seems to have typically been read by the [subj].,cleft subject raising perfect passive,read,reviewer,editor,student,scientist,child,actor,book,article,document,script,story,magazine,typically
+151,The [subj] has typically bought the [obj].,perfect transitive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,typically
+152,The [subj] seems to have always bought the [obj].,raising perfect transitive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,always
+153,It is the [subj] that has often bought the [obj].,cleft subject perfect transitive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,often
+154,The [subj] hasn't usually bought the [obj].,neg perfect transitive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,usually
+155,It is the [subj] that seems to have typically bought the [obj].,cleft subject raising perfect transitive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,typically
+156,The [obj] has always been bought by the [subj].,perfect passive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,always
+157,The [obj] seems to have often been bought by the [subj].,raising perfect passive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,often
+158,It is the [obj] that has usually been bought by the [subj].,cleft subject perfect passive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,usually
+159,The [obj] hasn't typically been bought by the [subj].,neg perfect passive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,typically
+160,It is the [obj] that seems to have always been bought by the [subj].,cleft subject raising perfect passive,buy,customer,guest,manager,farmer,doctor,technician,cereal,tape,phone,grain,medicine,hammer,always
+161,The [subj] has always broken the [obj].,perfect transitive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,always
+162,The [subj] seems to have often broken the [obj].,raising perfect transitive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,often
+163,It is the [subj] that has usually broken the [obj].,cleft subject perfect transitive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,usually
+164,The [subj] hasn't typically broken the [obj].,neg perfect transitive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,typically
+165,It is the [subj] that seems to have always broken the [obj].,cleft subject raising perfect transitive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,always
+166,The [obj] has often been broken by the [subj].,perfect passive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,often
+167,The [obj] seems to have usually been broken by the [subj].,raising perfect passive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,usually
+168,It is the [obj] that has typically been broken by the [subj].,cleft subject perfect passive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,typically
+169,The [obj] hasn't always been broken by the [subj].,neg perfect passive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,always
+170,It is the [obj] that seems to have often been broken by the [subj].,cleft subject raising perfect passive,break,teenager,dog,cat,gentleman,friend,worker,jar,glass,dish,mirror,window,camera,often

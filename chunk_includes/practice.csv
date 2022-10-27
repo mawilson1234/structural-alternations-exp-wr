@@ -1,0 +1,13 @@
+item,sentence,sentence_type,group,word_0,word_1,word_2,word_3,word_4,word_5,word_6,word_7,adverb
+prac,The [subj] has always eaten the [obj].,perfect transitive,prac,person,guest,child,customer,pizza,orange,steak,bread,always
+prac,"Even though the [subj] has typically eaten the [obj], no one is happy about it.",perfect transitive,prac,person,guest,child,customer,pizza,orange,steak,bread,often
+prac,The [subj] has always regretted the [obj].,perfect transitive,prac,prince,president,client,author,choice,error,decision,statement,always
+prac,"Because the [subj] has usually regretted the [obj], I'm satisfied.",perfect transitive,prac,prince,president,client,author,choice,error,decision,statement,often
+prac,The [subj] has always read the [obj].,perfect transitive,prac,reviewer,editor,student,scientist,book,article,document,script,always
+prac,I'm surprised that the [subj] has never read the [obj].,perfect transitive,prac,reviewer,editor,student,scientist,book,article,document,script,often
+prac,It is the [subj] that has typically eaten the [obj].,cleft subject perfect transitive,prac,person,guest,child,customer,pizza,orange,steak,bread,typically
+prac,The [subj] seems to have often eaten the [obj].,raising perfect transitive,prac,person,guest,child,customer,pizza,orange,steak,bread,often
+prac,The [obj] seems to have always been eaten by the [subj].,raising perfect passive,prac,person,guest,child,customer,pizza,orange,steak,bread,always
+prac,The [obj] hasn't typically been regretted by the [subj].,neg perfect passive,prac,prince,president,client,author,choice,error,decision,statement,typically
+prac,It is the [subj] that seems to have often regretted the [obj].,cleft subject raising perfect transitive,prac,prince,president,client,author,choice,error,decision,statement,often
+prac,The [obj] seems to have usually been regretted by the [subj].,raising perfect passive,prac,prince,president,client,author,choice,error,decision,statement,usually
