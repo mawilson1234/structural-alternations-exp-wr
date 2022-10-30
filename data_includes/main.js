@@ -6,6 +6,7 @@ SetCounter("setcounter")
 var counterOverride = 0
 
 var required_to_pass = 0.75
+var required_to_pass_perc = String(Math.round(required_to_pass * 100))
 var max_attempts = 5
 
 var blank_style = {
@@ -66,7 +67,7 @@ Sequence(
 	randomize("trial_train_rep3"), 'post-training',
 	randomize("trial_train_rep4"), 'post-training',
 	"instruction3",
-	sepWithN('break', randomize("trial"), 27),
+	sepWithN('break', randomize("trial"), 44),
 	"feedback",
 	SendResults(),
 	"bye"
@@ -326,11 +327,11 @@ newTrial("instruction2",
 		"You should use this feedback to help you learn.<p />" +
 		
 		"Because we want you to learn as much as you can about the pattern of words in sentences with <i>blork</i>, " +
-		"we would like you to continue the training process until you are able to choose correctly 75% of the time. " +
-		"We'll let you repeat the training session a number of times until you reach 75% accuracy, " +
+		"we would like you to continue the training process until you are able to choose correctly " + required_to_pass_perc + "% of the time. " +
+		"We'll let you repeat the training session a number of times until you reach " + required_to_pass_perc  + "% accuracy, " +
 		"and give you feedback on how you did at the end of each session. " +
 		"In any case, don't worry if you have difficulty: there is a limit on how many sessions " +
-		"we will ask you to do, even if you aren't able to reach 75%.<p />" +
+		"we will ask you to do, even if you aren't able to reach " + required_to_pass_perc + "%.<p />" +
 		
 		"The first several trials of the first training session will be a warm-up. " +
 		"This warm-up won't count towards your accuracy, so feel free to guess for a few trials " +
