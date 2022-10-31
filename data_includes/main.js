@@ -1,7 +1,7 @@
 PennController.ResetPrefix(null) // Shorten command names (keep this line here)
 DebugOff()
 
-SetCounter("setcounter")
+SetCounter('setcounter')
 
 var counterOverride = 0
 
@@ -135,6 +135,7 @@ var feedback_trial = label => item => {
 	var postsentence = postsentence.startsWith(',') | postsentence.startsWith('.') ? postsentence : '&nbsp;' + postsentence
 	var first_arg	 = item.sentence.match(/\[(su|o)bj\]/g)[0]
 	var second_arg   = item.sentence.match(/\[(su|o)bj\]/g)[1]
+	var MS_PER_WORD  = MS_PER_WORD
 	
 	return newTrial(label,
 		newText("word", word).css({width: '', border: '1px solid #000', padding: '3px'}).center(),
