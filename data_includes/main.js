@@ -186,7 +186,7 @@ var feedback_trial = label => item => {
 						getMouseTracker("mouse").stop(),
 						getVar('firstdropped').test.is(v => v === 'no drop yet')
 							.success(
-								getVar('trial_no').test.is(v => label === 'trial_train_rep_00' ? true : (label === 'trial_prac' ? false : true))
+								getVar('trial_no').test.is(v => label === 'trial_train_rep_00' ? v > 15 : (label === 'trial_prac' ? false : true))
 									.success(getVar('responses').set(v => [true, ...v]))
 							)
 					)
@@ -201,7 +201,7 @@ var feedback_trial = label => item => {
 								// these have only 12 items. thus, we run a check that will always return true
 								// to deal with the fact that we don't care about accuracy of the earlier trials, we just don't set anything
 								// if the check fails
-								getVar('trial_no').test.is(v => label === 'trial_train_rep_00' ? true : (label === 'trial_prac' ? false : true))
+								getVar('trial_no').test.is(v => label === 'trial_train_rep_00' ? v > 15 : (label === 'trial_prac' ? false : true))
 									.success(getVar('responses').set(v => [false, ...v]))
 							)
 					),
