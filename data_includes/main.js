@@ -5,9 +5,10 @@ SetCounter("setcounter")
 
 var counterOverride = 0
 
-var required_to_pass = 0.75
+var required_to_pass = 0.9
 var required_to_pass_perc = String(Math.round(required_to_pass * 100))
 var max_attempts = 5
+var MS_PER_WORD = 0 //325
 
 var blank_style = {
 	border: '1px solid #000', 
@@ -61,7 +62,9 @@ Sequence(
 	"instruction1",
 	randomize("trial_prac"),
 	"instruction2",
-	randomize("trial_train"), 'post-training',
+	// randomize("trial_train"), 'post-training',
+	randomize("trial_train_rep00"),
+	randomize("trial_train_rep01"), 'post-training',
 	randomize("trial_train_rep1"), 'post-training',
 	randomize("trial_train_rep2"), 'post-training',
 	randomize("trial_train_rep3"), 'post-training',
@@ -161,7 +164,7 @@ var feedback_trial = label => item => {
 		newText(postsentence).print(getText("container")),
 		
 		newText("placeholder", "&mdash;").center().print(),
-		newTimer("wait", item.sentence.split(" ").length * 325).start().wait(),
+		newTimer("wait", item.sentence.split(" ").length * MS_PER_WORD).start().wait(),
 		getText("placeholder").remove(),
 		
 		getText("word").print(),
@@ -183,7 +186,7 @@ var feedback_trial = label => item => {
 						getMouseTracker("mouse").stop(),
 						getVar('firstdropped').test.is(v => v === 'no drop yet')
 							.success(
-								getVar('trial_no').test.is(v => label === 'trial_train' ? v > 15 : (label === 'trial_prac' ? false : true))
+								getVar('trial_no').test.is(v => label === 'trial_train_rep_00' ? false : (label === 'trial_prac' ? false : true))
 									.success(getVar('responses').set(v => [true, ...v]))
 							)
 					)
@@ -198,7 +201,7 @@ var feedback_trial = label => item => {
 								// these have only 12 items. thus, we run a check that will always return true
 								// to deal with the fact that we don't care about accuracy of the earlier trials, we just don't set anything
 								// if the check fails
-								getVar('trial_no').test.is(v => label === 'trial_train' ? v > 15 : (label === 'trial_prac' ? false : true))
+								getVar('trial_no').test.is(v => label === 'trial_train_rep_00' ? false : (label === 'trial_prac' ? false : true))
 									.success(getVar('responses').set(v => [false, ...v]))
 							)
 					),
@@ -352,7 +355,9 @@ newTrial("instruction2",
 		.wait()
 )
 
-Template("train.csv", feedback_trial('trial_train'))
+// Template("train.csv", feedback_trial('trial_train'))
+Template("train_rep1.csv", feedback_trial('trial_train_rep00'))
+Template("train_rep2.csv", feedback_trial('trial_train_rep01'))
 Template("train_rep1.csv", feedback_trial('trial_train_rep1'))
 Template("train_rep2.csv", feedback_trial('trial_train_rep2'))
 Template("train_rep1.csv", feedback_trial('trial_train_rep3'))
@@ -481,7 +486,7 @@ var trial = group_label => item => {
 		newText(postsentence).print(getText("container")),
 		
 		newText("placeholder", "&mdash;").center().print(),
-		newTimer("wait", item.sentence.split(" ").length * 325).start().wait(),
+		newTimer("wait", item.sentence.split(" ").length * MS_PER_WORD).start().wait(),
 		getText("placeholder").remove(),
 		
 		newText("word", word).css({border: '1px solid #000', padding: '3px'}).center().print(),
