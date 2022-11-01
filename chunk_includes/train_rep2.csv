@@ -5,8 +5,8 @@ prac,The [subj] has typically blorked the [obj].,perfect transitive,white_red,lo
 prac,"Despite George's best efforts, the [subj] has usually blorked the [obj].",perfect transitive,white_red,lobster,[obj],typically
 prac,I'm surprised that the [subj] has never blorked the [obj].,perfect transitive,white_red,milk,[subj],always
 prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive,white_red,milk,[subj],often
-prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,onion,[subj],often
-prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,onion,[subj],always
+prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,egg,[subj],often
+prac,The [subj] has always blorked the [obj].,perfect transitive,white_red,egg,[subj],always
 prac,The [subj] has always blorked the [obj] when Chris is in town.,perfect transitive,white_red,pearl,[subj],typically
 prac,That's the [obj] that the [subj] has often blorked.,presentational ORC perfect transitive,white_red,pearl,[subj],often
 prac,She insisted that the [subj] has rarely blorked the [obj].,perfect transitive,white_red,ruby,[obj],often
