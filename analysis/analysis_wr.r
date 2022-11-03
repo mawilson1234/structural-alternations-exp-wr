@@ -45,7 +45,7 @@ colnames <- c(
 	'sentence', 'adverb', 'seen_in_training', 'template', 'comments'
 )
 
-results <- rbind(results, read.csv(
+results <- read.csv(
 		paste0('results-', current.exp, '.csv'), 
 		comment.char='#',
 		header=FALSE, 
@@ -56,7 +56,6 @@ results <- rbind(results, read.csv(
 	as_tibble() |>
 	select(ip_md5, condition, order, element_name:template) |>
 	mutate(data_source = 'human')
-)
 
 # Relabel subjects with smaller values
 results <- results |> 
@@ -225,7 +224,7 @@ py_run_string('from tqdm import tqdm')
 py_run_string(
 	paste0(
 		'csvs = glob("C:/Users/mawilson/OneDrive - Yale University/',
-		'CLAY Lab/structural-alternations/outputs/fheO/*bert*/', current.exp, '-margs*/',
+		'CLAY Lab/structural-alternations/outputs/fheO/*bert*/', current.exp, 'margs*/',
 		'**/*odds_ratios.csv.gz", recursive=True)'
 	)
 )
@@ -296,10 +295,13 @@ model.results <- model.results |>
 			sentence %like% 'usually' ~ 'usually',
 			sentence %like% 'typically' ~ 'typically'
 		),
-		subject = match(random_seed, c(
-			1:max(1,as.numeric(as.character(results$subject))), 
-			random_seed |> unique()
-		)),
+		subject = match(
+			random_seed, 
+			c(
+				seq_len(max(0,as.numeric(as.character(results$subject)))),
+				py$model_results$random_seed |> unique()
+			)
+		),
 		args_group = case_when(
 						condition == 'experimental' ~ args_group,
 						condition == 'filler' ~ gsub('syn_(.*?)_ext_for_human_exp', '\\1', eval_data)
@@ -345,11 +347,11 @@ results <- results |>
 						fct_relevel('Subject target', 'Object target'),
 		args_group = paste(gsub('\\_', '+', args_group), 'args') |> 
 						fct_relevel(
-							'female+male args', 
-							'red+yellow args', 
-							'vehicles+buildings args', 
-							'buildings+vehicles args',
-							'vanimals+canimals args',
+							# 'female+male args', 
+							# 'red+yellow args', 
+							# 'vehicles+buildings args', 
+							# 'buildings+vehicles args',
+							# 'vanimals+canimals args',
 							'white+red args',
 							'eat args',
 							'regret args',
