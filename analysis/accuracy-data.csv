@@ -1,4 +1,84 @@
 "subject","item","target_response","sentence_type","seen_in_training","data_source","mask_added_tokens","stop_at","response","log.RT","correct","voice","model_id","linear","mean_cossim_to_targets","f.score.pre.training","seen_in_training.n","target_response.n","data_source.n","voice.n","linear.n","RT"
+"1","21","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.87164566750187,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,7127.00000000001
+"1","1","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.986504938554,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2941
+"1","5","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.07651532755233,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3218
+"1","78","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.54461378699223,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,5139
+"1","37","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.96877823513796,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,7854.00000000001
+"1","77","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.14177220465645,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3435
+"1","24","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.9441588309704,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,7662.99999999999
+"1","0","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.72929567431048,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2274
+"1","36","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.32142158689788,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4111
+"1","9","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.11939858961229,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3359
+"1","30","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.26178467951475,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3873
+"1","59","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",9.25970180151391,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,10506
+"1","33","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.69483715865908,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,5972
+"1","16","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.31801027754687,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4097
+"1","58","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.32675881451173,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,4133
+"1","19","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.36915711258883,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4312
+"1","39","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.48094405874112,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4822
+"1","8","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.40760151478614,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4481
+"1","26","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.48260174664662,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4830
+"1","42","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",9.2135352628727,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,10032
+"1","67","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.17075142375753,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3536
+"1","46","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.73214326770192,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,6199
+"1","6","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.20303024171486,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3652
+"1","13","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.28601746840476,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3968
+"1","50","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.26049285657318,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,3868
+"1","18","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.67334187390617,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,5845
+"1","53","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.38251828808963,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,4370
+"1","7","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.21338173703457,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3690
+"1","60","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.47928361834302,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,4814
+"1","4","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.07961802938984,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3228
+"1","55","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.58485183989005,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,5350
+"1","14","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.08425410630732,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3243
+"1","15","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.79315687091382,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,6588.99999999999
+"1","52","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.33086361322474,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,4150
+"1","45","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.1610895128458,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3502
+"1","34","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.19671240721307,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3629
+"1","56","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",9.58781744354418,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,14586
+"1","73","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.99900721324395,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2978
+"1","61","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.81439963380449,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2476
+"1","68","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.81681996576455,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2482
+"1","43","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.85825418218603,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2587
+"1","66","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.32457884513685,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,4124
+"1","70","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.30548401772769,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,4046
+"1","31","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.61884684514274,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,5535
+"1","57","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.02322468471667,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3051
+"1","64","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.88557929128298,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,7227
+"1","2","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.68753876620163,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2181
+"1","65","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.91862865334224,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2748
+"1","76","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.10922495308995,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3325
+"1","35","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.19007704971905,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3605
+"1","40","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.78821155784708,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2412
+"1","17","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.99967857949945,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,2980
+"1","3","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.85593219971861,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2581
+"1","32","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.38091517312361,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,4363
+"1","49","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.29329935871132,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3997
+"1","75","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.16990264735914,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3533
+"1","44","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.63070043220983,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,5601
+"1","62","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.89729647259588,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2690
+"1","63","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.03947991910045,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,3101
+"1","74","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.22496747891458,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,3733
+"1","47","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.39525152061099,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,4426
+"1","38","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.45616848957846,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4704
+"1","27","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.68862230704377,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,5935
+"1","41","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.55024104546244,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,5168
+"1","28","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.53856321715243,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,5108
+"1","23","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.63230599851674,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,5610
+"1","12","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.22282213081366,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3725
+"1","10","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.00068478451475,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2983
+"1","54","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.13388088794921,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,3408
+"1","79","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.1164170727942,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3349
+"1","71","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.80751004221619,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2459
+"1","48","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.5016733797582,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,4923
+"1","51","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.79709507654906,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,6615
+"1","69","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.83608319099221,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,6878
+"1","29","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.92840602618053,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,2775
+"1","20","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.2220164372022,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3722
+"1","25","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.56371966841437,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1927
+"1","72","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.61035761831284,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2019
+"1","11","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.7738488852629,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,6463
+"1","22","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.3387839714422,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,4183
 "2","14","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.33327035325531,TRUE,"SVO active",NA,"Non-linear",NA,NA,0.5,-0.5,0.5,0.5,0.5,4160
 "2","13","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.0643219609108,TRUE,"SVO active",NA,"Non-linear",NA,NA,0.5,-0.5,0.5,0.5,0.5,3179
 "2","57","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.86863689418417,TRUE,"OVS passive",NA,"Non-linear",NA,NA,0.5,0.5,0.5,-0.5,0.5,2614
@@ -79,6 +159,86 @@
 "2","38","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.46611040118692,FALSE,"OVS passive",NA,"Non-linear",NA,NA,0.5,-0.5,0.5,-0.5,0.5,4751
 "2","48","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.67832635650689,TRUE,"OVS passive",NA,"Non-linear",NA,NA,0.5,0.5,0.5,-0.5,0.5,2161
 "2","52","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.20740183337636,TRUE,"SVO active",NA,"Non-linear",NA,NA,0.5,0.5,0.5,0.5,0.5,3668
+"3","22","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.7645219095188,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,6403
+"3","14","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.01565761455734,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3028
+"3","51","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",9.28377669004936,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,10762
+"3","13","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.67878899819915,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2162
+"3","15","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.46049030582534,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1738
+"3","61","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.646353722446,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2093
+"3","35","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.25205395185281,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1411
+"3","47","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.32974968904151,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1525
+"3","1","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.15851624480683,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3493
+"3","31","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.32712329225929,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1521
+"3","18","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.34213173058472,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1544
+"3","42","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.57353126274595,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1946
+"3","3","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.96901178110648,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2890
+"3","41","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.09132127353041,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,3266
+"3","27","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.42773884053289,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1682
+"3","52","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.57558465155779,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1950
+"3","4","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.33171496972647,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1528
+"3","46","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.44949800538285,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1719
+"3","64","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.92678311410135,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,7530.99999999999
+"3","8","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.54115245513631,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1884
+"3","65","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.49801037199946,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,4905
+"3","73","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.81278281857758,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2472
+"3","71","Object target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.40000951716269,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1636
+"3","6","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.51261754467451,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1831
+"3","66","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.42833319419081,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1683
+"3","75","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.82604401351897,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2505
+"3","62","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.48549160803075,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1782
+"3","76","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.41397029019044,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1659
+"3","2","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.94803199063728,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2830
+"3","23","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.28824440102012,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1463
+"3","30","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.10982627601848,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3327
+"3","12","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.18387071506245,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1318
+"3","74","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.46164039220858,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1740
+"3","69","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.79852305362521,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2437
+"3","60","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.48211892355212,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1776
+"3","21","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.16507925880507,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,3516
+"3","38","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.05579245097777,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3152
+"3","11","Subject target","raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.44366368311559,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1709
+"3","25","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.70350676947973,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,6024
+"3","78","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.34069464792507,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,4191
+"3","54","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.99361999482774,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2962
+"3","50","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.45298232946546,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1725
+"3","70","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.46851327149634,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1752
+"3","17","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.9287663216267,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,2776
+"3","19","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.11969625295725,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3360
+"3","16","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.40610338123702,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1646
+"3","59","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.84893372636407,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2563
+"3","28","Subject target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.78405700263993,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,2402
+"3","43","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.45531778769815,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,4700
+"3","53","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.1744211526465,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,3549
+"3","58","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.92804560087478,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2774
+"3","68","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.44716835960004,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1715
+"3","32","Subject target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",8.00503334463711,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2996
+"3","0","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.59488438721652,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1988
+"3","77","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.47533923656674,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1764
+"3","5","Subject target","perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.41997992366183,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1669
+"3","37","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.26487826280175,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,3885
+"3","29","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.56786260546388,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1935
+"3","9","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.3039999709552,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,4040
+"3","36","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.7007477945118,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,2210
+"3","34","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.31588350450979,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1504
+"3","67","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.4489161025442,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1718
+"3","7","Subject target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.57147364885127,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1942
+"3","48","Object target","neg perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.42476176182321,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1677
+"3","24","Subject target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.46965417293213,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1754
+"3","55","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[subj]",8.15162164696975,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3469
+"3","44","Object target","cleft subject raising perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.49831587076698,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1805
+"3","10","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.96415571884094,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,2876
+"3","40","Object target","perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",8.60337088765729,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,5450
+"3","49","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.67693714581808,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2158
+"3","56","Object target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.0487882835342,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,3130
+"3","45","Object target","perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.52617891334615,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,1856
+"3","72","Object target","cleft subject perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.50933526601659,FALSE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,1825
+"3","79","Object target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",8.0013550258267,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2985
+"3","63","Object target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[obj]",7.63240112660145,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,0.5,0.5,0.5,-0.5,2064
+"3","33","Subject target","neg perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.50659178007084,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1820
+"3","26","Subject target","raising perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.27170370688737,FALSE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1439
+"3","20","Subject target","perfect transitive","Seen","human","Don't mask blork","convergence","[subj]",7.56320059235807,TRUE,"SVO active",NA,"Linear",NA,NA,0.5,-0.5,0.5,0.5,-0.5,1926
+"3","39","Subject target","cleft subject raising perfect passive","Seen","human","Don't mask blork","convergence","[subj]",7.41517510961329,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,-0.5,0.5,-0.5,-0.5,1661
+"3","57","Object target","cleft subject perfect passive","Seen","human","Don't mask blork","convergence","[obj]",7.64683139143048,TRUE,"OVS passive",NA,"Linear",NA,NA,0.5,0.5,0.5,-0.5,-0.5,2094
 "84","0","Subject target","perfect transitive","Seen","BERT","Don't mask blork","convergence","[subj]",NA,TRUE,"SVO active","2022-11-01_12-29-05.948261-b","Non-linear",0.0256372808048931,0.299065420560748,0.5,-0.5,-0.5,0.5,0.5,NA
 "84","1","Subject target","raising perfect transitive","Seen","BERT","Don't mask blork","convergence","[subj]",NA,TRUE,"SVO active","2022-11-01_12-29-05.948261-b","Non-linear",0.0256372808048931,0.299065420560748,0.5,-0.5,-0.5,0.5,0.5,NA
 "84","2","Subject target","cleft subject perfect transitive","Seen","BERT","Don't mask blork","convergence","[subj]",NA,TRUE,"SVO active","2022-11-01_12-29-05.948261-b","Non-linear",0.0256372808048931,0.299065420560748,0.5,-0.5,-0.5,0.5,0.5,NA
