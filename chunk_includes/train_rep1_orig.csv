@@ -1,0 +1,16 @@
+item,sentence                                                                           ,sentence_type                        ,group    ,word   ,target_response,adverb   
+prac,It is the [obj] that the [subj] has always blorked.                                ,cleft object perfect transitive      ,white_red,blood  ,[obj]          ,always   
+prac,She insisted that the [subj] has rarely blorked the [obj].                         ,perfect transitive                   ,white_red,blood  ,[obj]          ,often    
+prac,I'm surprised that the [subj] has never blorked the [obj].                         ,perfect transitive                   ,white_red,lobster,[obj]          ,always   
+prac,It is the [obj] that the [subj] has always blorked.                                ,cleft object perfect transitive      ,white_red,milk   ,[subj]         ,always   
+prac,"Despite George's best efforts, the [subj] has usually blorked the [obj]."         ,perfect transitive                   ,white_red,milk   ,[subj]         ,typically
+prac,The [subj] has typically blorked the [obj].                                        ,perfect transitive                   ,white_red,egg    ,[subj]         ,usually  
+prac,That's the [obj] that the [subj] has often blorked.                                ,presentational ORC perfect transitive,white_red,egg    ,[subj]         ,often    
+prac,"Because the [subj] has usually blorked the [obj], I'm satisfied."                 ,perfect transitive                   ,white_red,pearl  ,[subj]         ,usually  
+prac,The [subj] has always blorked the [obj].                                           ,perfect transitive                   ,white_red,pearl  ,[subj]         ,always   
+prac,The [subj] has always blorked the [obj] when Chris is in town.                     ,perfect transitive                   ,white_red,ruby   ,[obj]          ,typically
+prac,The [subj] has always blorked the [obj].                                           ,perfect transitive                   ,white_red,ruby   ,[obj]          ,always   
+prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive                   ,white_red,sheep  ,[subj]         ,often    
+prac,The [subj] has always blorked the [obj] when Chris is in town.                     ,perfect transitive                   ,white_red,sheep  ,[subj]         ,typically
+prac,"Because the [subj] has usually blorked the [obj], I'm satisfied."                 ,perfect transitive                   ,white_red,tomato ,[obj]          ,usually  
+prac,"Even though the [subj] has typically blorked the [obj], no one is happy about it.",perfect transitive                   ,white_red,tomato ,[obj]          ,often    

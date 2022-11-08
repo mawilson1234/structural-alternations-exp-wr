@@ -134,10 +134,10 @@ training.accuracy.by.halves <- results |>
 	select(-n_tries, -total) |>
 	rename(pr_first_choice_correct = pr_correct)
 
-less.than.75.on.training <- training.accuracy.by.dozen |>
+less.than.75.on.training <- training.accuracy.by.halves |>
 	filter(
-		dozen == max(dozen),
-		pr_first_choice_correct < 0.75
+		repetition == max(repetition),
+		pr_first_choice_correct < 0.9
 	)
 
 # Get feedback
