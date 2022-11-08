@@ -54,7 +54,7 @@ def sbatch_all(s):
 		try:
 			# create a joblist txt file
 			joblist = []
-			for script in globbed:
+			for script in sorted(globbed):
 				with open(script, 'rt') as in_file: 
 					script = in_file.readlines()
 				
