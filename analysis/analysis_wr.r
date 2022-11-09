@@ -108,21 +108,21 @@ breaktimes <- results |>
 # for some subjects, this is inaccurate due to
 # a bug in the way PCIbex records results
 # with identical trial labels. the training
-# repetition criteria worked correctly
-training.accuracy.by.halves <- results |>
+# repitition criteria worked correctly
+training.accuracy.by.session.no <- results |>
 	filter(
 		condition %like% 'trial_train',
 		parameter == 'Drop'
 	) |> 
 	group_by(subject, mask_added_tokens, stop_at) |>
 	mutate(order = rleid(order)) |>
-	group_by(subject, data_source, mask_added_tokens, stop_at, order) |>
+	group_by(subject, data_source, condition, mask_added_tokens, stop_at, order) |>
 	summarize(n_tries = n()) |>
 	ungroup() |>
-	mutate(repetition = ceiling(order/15)) |>
-	group_by(subject, data_source, mask_added_tokens, stop_at, repetition) |>
+	mutate(session.no = case_when(order <= 21 ~ 1, TRUE ~ ceiling((order - 21)/15)+1)) |>
+	group_by(subject, data_source, mask_added_tokens, stop_at, session.no) |>
 	mutate(total = n()) |>
-	group_by(subject, data_source, mask_added_tokens, stop_at, repetition, n_tries, total) |>
+	group_by(subject, data_source, mask_added_tokens, stop_at, session.no, n_tries, total) |>
 	summarize(pr_correct = n()/total) |>
 	distinct() |>
 	ungroup() |>
@@ -134,9 +134,9 @@ training.accuracy.by.halves <- results |>
 	select(-n_tries, -total) |>
 	rename(pr_first_choice_correct = pr_correct)
 
-less.than.75.on.training <- training.accuracy.by.halves |>
+less.than.75.on.training <- training.accuracy.by.session.no |>
 	filter(
-		repetition == max(repetition),
+		session.no == max(session.no),
 		pr_first_choice_correct < 0.9
 	)
 
