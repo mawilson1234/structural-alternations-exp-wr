@@ -4,6 +4,8 @@ analysis/Models/
 analysis/Models
 analysis/Plots/
 analysis/Plots
+analysis/Pilot/
+analysis/Pilot
 analysis/results*
 
 scripts/backup-power-analysis.sh
