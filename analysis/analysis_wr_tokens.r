@@ -1,23 +1,12 @@
 # Load libraries
 library(plyr)
 library(ggh4x)
+library(purrr)
 library(ggpubr)
 library(stringr)
 library(tidyverse)
 library(data.table)
 library(reticulate)
-
-# Create directories to store results
-current.exp <- 'wr'
-plots.dir 	<- 'Plots'
-models.dir 	<- 'Models'
-dir.create(plots.dir, 	showWarnings=FALSE, recursive=TRUE)
-dir.create(models.dir, 	showWarnings=FALSE, recursive=TRUE)
-
-MOST_RECENT_SUBJECTS <- 7:9
-
-MAX_RT_IN_SECONDS <- 10
-OUTLIER_RT_SDS <- 2
 
 # confidence interval for beta distribution
 beta_ci <- function(y, ci=0.95) {
@@ -33,190 +22,6 @@ beta_ci <- function(y, ci=0.95) {
 	return(df)
 }
 
-# convenience
-s_view <- function(d, x) return (d |> filter(subject %in% x))
-
-s_mr <- function(d) return (d |> s_view(MOST_RECENT_SUBJECTS))
-
-# Load data
-colnames <- c(
-	'time_received', 'ip_md5', 'controller', 'order', 'element_no', 'condition', 
-	'latin_square_group', 'element_type', 'element_name', 'parameter', 'value', 
-	'event_time', 'item', 'word', 'target_response', 'args_group', 'sentence_type', 
-	'sentence', 'adverb', 'seen_in_training', 'template', 'comments'
-)
-
-results <- read.csv(
-		paste0('results-', current.exp, '.csv'), 
-		comment.char='#',
-		header=FALSE, 
-		quote='',
-		col.names=colnames, 
-		fill=TRUE
-	) |> 
-	as_tibble() |>
-	select(ip_md5, condition, order, element_name:template) |>
-	mutate(data_source = 'human')
-
-# Relabel subjects with smaller values
-results <- results |> 
-	mutate(
-		subject = match(ip_md5, unique(ip_md5)),
-		subject = as.factor(subject)
-	) |>
-	select(subject, everything()) |>
-	select(-ip_md5) |>
-	mutate(
-		subject = as.numeric(as.character(subject)),
-		subject = match(subject, unique(subject)),
-		subject = as.factor(subject)
-	)
-
-# add columns so that models can be added
-results <- results |>
-	as_tibble() |>
-	mutate(
-		subject = as.factor(subject),
-		correct.pre.training = NA_real_,
-		mask_added_tokens = "Don't mask blork",
-		stop_at = 'convergence'
-	)
-
-# get break times
-breaktimes <- results |>
-	filter(condition == 'break') |>
-	select(subject, value, event_time) |>
-	group_by(subject) |>
-	mutate(break_number = sort(rep(1:(n()/2),2))) |>
-	spread(value, event_time) |>
-	mutate(duration = End - Start) |>
-	select(-Start, -End) |>
-	mutate(
-		minutes = duration/(60 * 1000),
-		seconds = (minutes %% 1) * 60,
-		milliseconds = (seconds %% 1) * 1000,
-		break_time = paste0(
-			str_pad(trunc(minutes),2,pad='0'), ':', 
-			str_pad(trunc(seconds), 2, pad='0'), '.', 
-			str_pad(round(milliseconds), 3, pad='0')
-		)
-	) |>
-	select(subject, break_number, break_time, duration)
-
-# training first choice accuracy by half
-# for some subjects, this is inaccurate due to
-# a bug in the way PCIbex records results
-# with identical trial labels. the training
-# repitition criteria worked correctly
-training.accuracy.by.session.no <- results |>
-	filter(
-		condition %like% 'trial_train',
-		parameter == 'Drop'
-	) |> 
-	group_by(subject, mask_added_tokens, stop_at) |>
-	mutate(order = rleid(order)) |>
-	group_by(subject, data_source, condition, mask_added_tokens, stop_at, order) |>
-	summarize(n_tries = n()) |>
-	ungroup() |>
-	mutate(session.no = case_when(order <= 21 ~ 1, TRUE ~ ceiling((order - 21)/15)+1)) |>
-	group_by(subject, data_source, mask_added_tokens, stop_at, session.no) |>
-	mutate(total = n()) |>
-	group_by(subject, data_source, mask_added_tokens, stop_at, session.no, n_tries, total) |>
-	summarize(pr_correct = n()/total) |>
-	distinct() |>
-	ungroup() |>
-	group_by(subject, data_source, mask_added_tokens, stop_at) |>
-	filter(
-		# dozen == max(dozen),
-		n_tries == min(n_tries)
-	) |>
-	select(-n_tries, -total) |>
-	rename(pr_first_choice_correct = pr_correct)
-
-less.than.90.on.training <- training.accuracy.by.session.no |>
-	filter(
-		session.no == max(session.no),
-		pr_first_choice_correct < 0.9
-	)
-
-# Get feedback
-feedback <- results |>
-	filter(element_name == 'feedback', item != 'Shift', parameter == 'Final') |>
-	select(subject, value) |>
-	rename(feedback = value) |>
-	mutate(feedback = gsub('%2C', ',', feedback))
-
-# organize results to one row per trial
-results <- results |> 
-	filter(
-		condition == 'trial',
-		!(parameter %in% c('Click', 'Drag', 'Final')),
-	) |> 
-	mutate(
-		parameter = case_when(
-						value %in% c('Start', 'End') ~ paste0(parameter, value),
-						TRUE 						 ~ parameter
-					),
-		element_name = case_when(
-						element_name == 'dd'			~ 'response',
-						startsWith(parameter, '_Trial')	~ parameter,
-						TRUE 				 			~ element_name
-					),
-		value = case_when(
-					parameter %in% c('_Trial_Start', '_Trial_End') ~ as.character(event_time),
-					TRUE 										   ~ value
-				)
-	) |>
-	select(-parameter, -event_time, -order, -template) |>
-	pivot_wider(
-		names_from = element_name,
-		values_from = value
-	)
-
-# add log RTs
-results <- results |>
-	rename(Trial_Start = '_Trial_Start', Trial_End = '_Trial_End') |>
-	mutate(
-		Trial_Start = as.numeric(Trial_Start),
-		Trial_End = as.numeric(Trial_End),
-		sentence_delay = (str_count(sentence, ' ') + 1) * 325,
-		log.RT = log(Trial_End - sentence_delay - Trial_Start)
-	) |> 
-	select(-Trial_Start, -Trial_End, -sentence_delay)
-
-# add experimental conditions
-results <- results |>
-	mutate(
-		condition 	= case_when(
-						grepl('_', args_group) 	~ 'experimental',
-						TRUE 					~ 'filler'
-					),
-		correct 	= case_when(
-						response == target_response ~ TRUE,
-						TRUE 						~ FALSE						
-					),
-		voice 		= case_when(
-						grepl('passive', sentence_type, fixed=TRUE) ~ 'OVS passive',
-						TRUE 										~ 'SVO active'
-					)
-	)
-
-# get unique item identifiers to add to the model results
-item.ids <- results |>
-	select(item, condition, word, args_group, sentence_type) |>
-	distinct() |> 
-	mutate(item = as.numeric(as.character(item))) |>
-	arrange(item)
-
-exp.item.ids <- item.ids |>
-	filter(condition == 'experimental') |>
-	select(-args_group)
-
-filler.item.ids <- item.ids |>
-	filter(condition == 'filler') |>
-	select(-word) |>
-	distinct()
-
 # We use python to read the gzipped files since it is MUCH faster than doing it in R
 py_run_string('import pandas as pd')
 py_run_string('from glob import glob')
@@ -224,7 +29,7 @@ py_run_string('from tqdm import tqdm')
 py_run_string(
 	paste0(
 		'csvs = glob("C:/Users/mawilson/OneDrive - Yale University/',
-		'CLAY Lab/structural-alternations/outputs/fheO/*bert*/', strsplit(current.exp, '-')[[1]][1], '-margs*/',
+		'CLAY Lab/structural-alternations/outputs/fheO/*bert*/wr-margs*/',
 		'**/*odds_ratios.csv.gz", recursive=True)'
 	)
 )
@@ -257,6 +62,7 @@ model.results <- model.results |>
 		(condition == 'filler' & token_type == 'eval special')
 	) |>
 	mutate(
+		item = match(sentence_num, sentence_num |> unique()),
 		stop_at = case_when(
 						max_epochs == 5000 ~ 'convergence',
 						TRUE ~ '260 epochs'
@@ -268,22 +74,16 @@ model.results <- model.results |>
 		correct = odds_ratio > 0,
 		correct.pre.training = (odds_ratio - odds_ratio_pre_post_difference) > 0,
 		sentence = gsub('(\\D)(\\D+)', '\\U\\1\\L\\2', sentence, perl=TRUE),
-		# training = case_when(
-		# 				eval_data %like% 'blorked_ext' ~ 'SVO only',
-		# 				eval_data %like% 'SVO-OSV' ~ 'SVO+OSV',
-		# 			),
 		training = 'SVO+OSV',
 		seen_in_training = case_when(
 			token_type == 'tuning' ~ 'True',
 			token_type == 'eval added' ~ 'False',
 			token_type == 'eval special' ~ NA_character_
 		),
-		mouse = NA_character_,
 		response = case_when(
 			odds_ratio > 0 ~ target_response,
 			TRUE ~ gsub('.*\\/(.*)', '\\1', ratio_name)
 		),
-		log.RT = NA_real_,
 		voice = case_when(
 			grepl('passive', sentence_type, fixed=TRUE) 		  ~ 'OVS passive',
 			grepl('.*\\[obj\\].*\\[subj\\].*blorked.*', sentence) ~ 'OSV active',
@@ -297,93 +97,91 @@ model.results <- model.results |>
 		),
 		subject = match(
 			random_seed, 
-			c(
-				seq_len(max(0,as.numeric(as.character(results$subject)))),
-				py$model_results$random_seed |> unique()
-			)
+			random_seed |> unique()
 		),
 		args_group = case_when(
 						condition == 'experimental' ~ args_group,
 						condition == 'filler' ~ gsub('syn_(.*?)_ext_for_human_exp', '\\1', eval_data)
 					)
 	) |>
-	filter(training == 'SVO+OSV') |>
-	left_join(exp.item.ids) |>
-	left_join(
-		filler.item.ids, 
-		by=c('condition', 'args_group', 'sentence_type'), 
-		suffix=c('', '.y')
-	) |>
-	mutate(item = coalesce(item, item.y)) |>
-	select(-item.y) |>
 	select(
-		subject, condition, training, item, word, target_response, args_group, sentence_type, 
-		sentence, adverb, seen_in_training, data_source, mouse, response, log.RT,
-		correct, correct.pre.training, voice, mask_added_tokens, stop_at, model_id
+		subject, condition, training, item, word, target_response, other_arg_type, args_group, sentence_type, 
+		sentence, adverb, seen_in_training, data_source, response,
+		log_probability, other_log_probability, other_arg_type,
+		correct, correct.pre.training, odds_ratio, odds_ratio_pre_post_difference, 
+		voice, mask_added_tokens, stop_at, model_id
 	) |> 
 	arrange(subject, item, word, adverb)
 
-# merge model results with human results
-results <- results |> 
-	mutate(
-		training = 'SVO+OSV',
-		subject = as.numeric(as.character(subject)),
-		model_id = NA_character_
-	) |> 
-	rbind(
-		model.results %>%
-			mutate(subject = as.numeric(as.character(.$subject)))
-	) |>
-	mutate(
-		subject = as.factor(subject),
-		seen_in_training = case_when(
-								seen_in_training == 'True' ~ 'Seen',
-								seen_in_training == 'False' ~ 'Unseen'
-							),
-		target_response = case_when(
-							target_response == '[subj]' ~ 'Subject target',
-							target_response == '[obj]'  ~ 'Object target'
-						) |> 
-						fct_relevel('Subject target', 'Object target'),
-		args_group = paste(gsub('\\_', '+', args_group), 'args') |> 
-						fct_relevel(
-							# 'female+male args', 
-							# 'red+yellow args', 
-							# 'vehicles+buildings args', 
-							# 'buildings+vehicles args',
-							# 'vanimals+canimals args',
-							'white+red args',
-							'eat args',
-							'regret args',
-							'break args', 
-							'buy args',
-							'read args'
-						),
-		sentence_type = fct_relevel(
-				sentence_type,
-				'perfect transitive',
-				'raising perfect transitive',
-				'cleft subject perfect transitive',
-				'neg perfect transitive',
-				'cleft subject raising perfect transitive',
-				'perfect passive',
-				'raising perfect passive',
-				'cleft subject perfect passive',
-				'neg perfect passive',
-				'cleft subject raising perfect passive',
-				'cleft object perfect transitive',
-				'presentational ORC perfect transitive'
-			),
-		voice = case_when(
-					grepl('passive', sentence_type, fixed=TRUE) 		  ~ 'OVS passive',
-					grepl('.*\\[obj\\].*\\[subj\\].*blorked.*', sentence) ~ 'OSV active',
-					TRUE 												  ~ 'SVO active'
-				),
-		voice = fct_relevel(voice, 'SVO active', 'OVS passive', 'OSV active'),
-		data_source = fct_relevel(data_source, 'human', 'BERT', 'DistilBERT', 'RoBERTa'),
-		mask_added_tokens = fct_relevel(mask_added_tokens, "Mask blork", "Don't mask blork"),
-		stop_at = fct_relevel(stop_at, '260 epochs', 'convergence')
-	)
+get_sentences_results <- function(df, file) {
+	if (file.exists(file)) {
+		return (fread(file) |> as_tibble())
+	}
+	
+	pairs <- df |>
+		select(word, target_response, args_group) |>
+		distinct() |> 
+		arrange(args_group, target_response, word) |>
+		dlply(
+			.(args_group), 
+			function(x) {
+				data.frame(x) |> 
+					select(-args_group) |>
+					dlply(
+						.(target_response),
+						\(x) data.frame(x) |> 
+							select(-target_response) |> 
+							pull(word)
+					)
+			}
+		) |>
+		lapply(
+			\(args_group) {
+				cross(args_group)
+			}
+		)
+	
+	new.df <- data.frame()
+	for (args_group2 in names(pairs)) {
+		cat('Processing args_group', args_group2, '\n')
+		for (i in seq_along(pairs[[args_group2]])) {
+			cat('Working on pair', i, 'of', length(pairs[[args_group2]]), '...', '\r')
+			pair <- pairs[[args_group2]][[i]]
+			new.df <- rbind(
+				new.df,
+				df |>
+					filter(
+						args_group == args_group2,
+						word %in% pair
+					) |> 
+					ungroup() |>
+					group_by(model_id, mask_added_tokens, stop_at, sentence) |>
+					mutate(
+						logprob_correct_subj 	= log_probability[word == pair$`[subj]` & target_response == '[subj]'],
+						logprob_correct_obj 	= log_probability[word == pair$`[obj]`  & target_response == '[obj]'],
+						logprob_wrong_subj 		= other_log_probability[word == pair$`[subj]` & target_response == '[subj]'],
+						logprob_wrong_obj 		= other_log_probability[word == pair$`[obj]`  & target_response == '[obj]'],
+						odds_ratio_sent 		= (logprob_correct_subj + logprob_correct_obj) - (logprob_wrong_subj + logprob_wrong_obj),
+						correct 				= odds_ratio_sent > 0
+					) |> 
+					select(-log_probability, -other_arg_type, -response, -other_log_probability, -odds_ratio, -correct.pre.training, -odds_ratio_pre_post_difference, -seen_in_training) |>
+					pivot_wider(names_from=target_response, values_from=word) |>
+					rename(subj=`[subj]`, obj=`[obj]`, odds_ratio = odds_ratio_sent) |>
+					ungroup()
+			)
+		}
+		cat('\n\n')
+	}
+	
+	write.csv(new.df, file, row.names=FALSE)
+	
+	return (new.df)
+}
+
+model.results.sentences <- model.results |>
+	get_sentences_results(file='model-results-sents-details.csv.gz')
+
+results <- model.results
 
 # exclude subjects less than <75% accurate on fillers (no stats)
 less.than.75.on.fillers <- results |>
@@ -396,8 +194,7 @@ less.than.75.on.fillers <- results |>
 not.above.chance.on.training.str <- results |>
 	filter(
 		condition == 'experimental',
-		sentence_type == 'perfect transitive', 
-		seen_in_training == 'Seen'
+		sentence_type == 'perfect transitive'
 	) |>
 	group_by(subject, data_source, training, mask_added_tokens, stop_at) |>
 	summarize(
@@ -424,10 +221,7 @@ purely.linear.by.arguments.both <- results |>
 					voice %like% 'active' ~ !correct,
 					voice %like% 'passive' ~ correct
 				),
-		target_response = case_when(
-							target_response %like% 'Subject' ~ 'subj',
-							target_response %like% 'Object' ~ 'obj'
-						)
+		target_response = gsub('\\[(.*?)\\]', '\\1', target_response)
 	) |> 
 	group_by(
 		subject, mask_added_tokens, stop_at, 
@@ -485,6 +279,14 @@ results <- results |>
 				)
 	)
 
+model.results.sentences <- model.results.sentences |>
+	mutate(
+		linear = case_when(
+					subject %in% purely.linear.by.arguments.both$subject ~ 'Linear',
+					TRUE ~ 'Non-linear'
+				)
+	)
+
 # read in cosine similarity files for models
 # to determine whether success distinguishing
 # pre-fine-tuning BLORKED from non-BLORKED targets
@@ -492,7 +294,7 @@ results <- results |>
 py_run_string(
 	paste0(
 		'cossim_csvs = glob("C:/Users/mawilson/OneDrive - Yale University/',
-		'CLAY Lab/structural-alternations/outputs/fheO/*bert*/', strsplit(current.exp, '-')[[1]][1], '-margs*/',
+		'CLAY Lab/structural-alternations/outputs/fheO/*bert*/wr-margs*/',
 		'**/*cossims.csv.gz", recursive=True)'
 	)
 )
@@ -521,12 +323,11 @@ cossim.means <- cossim.results |>
 	ungroup() |>
 	select(-target_group, -eval_epoch)
 
-results <- results |>
-	left_join(cossim.means)
+results <- results |> left_join(cossim.means)
+model.results.sentences <- model.results.sentences |> left_join(cossim.means)
 
 # get all excluded subjects
 all.excluded.subjects <- c(
-		as.numeric(as.character(less.than.90.on.training$subject)),
 		as.numeric(as.character(less.than.75.on.fillers$subject)),
 		as.numeric(as.character(not.above.chance.on.training.str$subject)),
 		as.numeric(as.character(purely.linear.by.arguments.both$subject))
@@ -543,10 +344,6 @@ all.excluded.subjects <- c(
 	mutate(
 		subject = as.factor(subject),
 		why = '',
-		why = case_when(
-				subject %in% less.than.90.on.training$subject ~ paste0(why, '<75% on training; '),
-				TRUE ~ why
-			),
 		why = case_when(
 				subject %in% less.than.75.on.fillers$subject ~ paste0(why, '<75% on fillers; '),
 				TRUE ~ why
@@ -568,7 +365,12 @@ excluded.for.reasons.other.than.nonlinear <- all.excluded.subjects |>
 	filter(why.excluded != 'n.d. from linear')
 
 full.results <- results
+full.sentence.results <- model.results.sentences
 results <- results |>
+	filter(!(subject %in% excluded.for.reasons.other.than.nonlinear$subject)) |>
+	droplevels()
+	
+model.results.sentences <- model.results.sentences |>
 	filter(!(subject %in% excluded.for.reasons.other.than.nonlinear$subject)) |>
 	droplevels()
 
@@ -577,7 +379,15 @@ exp <- results |>
 	filter(condition == 'experimental') |>
 	select(-condition)
 
+exp.sents <- model.results.sentences |>
+	filter(condition == 'experimental') |>
+	select(-condition)
+
 filler <- results |>
+	filter(condition == 'filler') |>
+	select(-condition)
+
+filler.sents <- model.results.sentences |>
 	filter(condition == 'filler') |>
 	select(-condition)
 
@@ -705,86 +515,6 @@ exp <- exp |>
 			rename(f.score.pre.training = f.score)	
 	)
 
-# save results for accuracy analysis
-accuracy.data <- exp |>
-	filter(
-		data_source %in% c('human', 'BERT'),
-		mask_added_tokens == "Don't mask blork",
-		stop_at == 'convergence',
-		# filter to only the actual sentences humans saw
-		paste(word, sentence) %in% (
-			exp |> 
-				filter(data_source == 'human') |>
-				select(word, sentence) |>
-				distinct() |>
-				droplevels() |>
-				mutate(word_sentence = paste(word, sentence)) |>
-				pull(word_sentence)
-		)
-	) |>
-	select(
-		-word, -args_group, -mouse, -correct.pre.training,
-		-f.score, -sentence, -training, -adverb
-	) |>
-	mutate(
-		seen_in_training.n = case_when(
-								seen_in_training == 'Seen'   ~  0.5,
-								seen_in_training == 'Unseen' ~ -0.5
-							),
-		target_response.n = case_when(
-								target_response == 'Object target'  ~  0.5,
-								target_response == 'Subject target' ~ -0.5
-							),
-		data_source.n = case_when(
-							data_source == 'human' ~  0.5,
-							data_source == 'BERT'  ~ -0.5
-						),
-		voice.n = case_when(
-					voice == 'SVO active'  ~  0.5,
-					voice == 'OVS passive' ~ -0.5
-				),
-		linear.n = case_when(
-					linear %like% '^Non-linear' ~  0.5,
-					linear %like% '^Linear'     ~ -0.5
-				),
-		RT = exp(log.RT)
-	)
-
-write.csv(accuracy.data, 'accuracy-data.csv', row.names=FALSE)
-
-# logistic regression including data source 
-# separate regressions for each argument group
-#	(model, human) * voice (active, passive) * (seen, unseen) * target_response
-# 	random effects for subjects/model random seed, random effect of word (nested within (seen, unseen)), 
-#   			       items
-# 
-# if humans succeed but models don't we expect interaction with data source (model, human)
-# nested comparisons for sentence types within voice
-#
-# separate analyses for each argument group
-# also correlation analyses including all human subjects who pass the filler exclusion criterion
-# to see how well accuracy in actives predicts accuracy in passives for individual tokens
-# (i.e., have they learned categories or individual tokens?)
-# one where correlation of accuracy across voice (one point per subject)
-# one where correlation of accuracy across voice (one point per word per subject)
-# also grouped by (seen, unseen), target_response, sentence_type (paired active and passive constructions)
-#
-# maybe exclude nouns where subjects < 100% on training structure got it wrong?
-
-linear_labels <- geom_text(
-		data = (
-			exp |> 
-				select(subject, data_source, mask_added_tokens, stop_at, linear) |>
-				distinct() |>
-				group_by(data_source, mask_added_tokens, stop_at, linear) |> 
-				summarize(count=sprintf("n=%02d", n()))
-		),
-		mapping = aes(x=-Inf, y=-Inf, label=count),
-		hjust=-0.5,
-		vjust=-1,
-		inherit.aes=FALSE
-	)
-
 linear_labels_no_humans <- geom_text(
 		data = (
 			exp |> 
@@ -792,21 +522,6 @@ linear_labels_no_humans <- geom_text(
 				select(subject, data_source, mask_added_tokens, stop_at, linear) |>
 				distinct() |>
 				group_by(data_source, mask_added_tokens, stop_at, linear) |> 
-				summarize(count=sprintf("n=%02d", n()))
-		),
-		mapping = aes(x=-Inf, y=-Inf, label=count),
-		hjust=-0.5,
-		vjust=-1,
-		inherit.aes=FALSE
-	)
-
-linear_labels_humans <- geom_text(
-		data = (
-			exp |> 
-				filter(data_source == 'human') |>
-				select(subject, linear) |>
-				distinct() |>
-				group_by(linear) |> 
 				summarize(count=sprintf("n=%02d", n()))
 		),
 		mapping = aes(x=-Inf, y=-Inf, label=count),
@@ -1010,6 +725,44 @@ exp |>
 	scale_fill_discrete('Target response') +
 	ggtitle(paste0('Pr. Correct by mean cosine similarity to blorked targets')) +
 	facet_grid2(data_source ~ mask_added_tokens + stop_at + linear + voice + target_response, scales='free_x', independent='x')
+
+exp.sents |>
+	mutate(
+		mask_added_tokens = as.factor(mask_added_tokens) |> fct_relevel('Mask blork', "Don't mask blork"),
+		voice = as.factor(voice) |> fct_relevel('SVO active', 'OVS passive', 'OSV active'),
+		subj_pref_in_subj_position = logprob_correct_subj > logprob_wrong_obj,
+		obj_pref_in_obj_position = logprob_correct_obj > logprob_wrong_subj,
+		both_pref = subj_pref_in_subj_position & obj_pref_in_obj_position
+	) |>
+	pivot_longer(
+		c(subj_pref_in_subj_position, obj_pref_in_obj_position, both_pref),
+		names_to='preference'
+	) |>
+	mutate(
+		preference = as.factor(preference) |> 
+						fct_relevel('subj_pref_in_subj_position', 'obj_pref_in_obj_position', 'both_pref')
+	) |>
+	ggplot(aes(x=voice, y=as.numeric(value), fill=preference)) +
+	stat_summary(fun=mean, geom='bar', position='dodge', width=0.9) +
+	stat_summary(fun.data=beta_ci, geom='errorbar', width=0.33, position=position_dodge(0.9)) +
+	stat_summary(
+		fun.data=\(y) data.frame(y=mean(y), label=sprintf('%.2f', mean(y)), fill='white'), 
+		geom='label', position=position_dodge(0.9), show.legend=FALSE
+	) +
+	scale_x_discrete(
+		'Template',
+		breaks = c('SVO active', 'OVS passive', 'OSV active'),
+		labels = c('SVO', 'OVS', '(OSV)')
+	) +
+	scale_fill_discrete(
+		'Preference',
+		breaks = c('subj_pref_in_subj_position', 'obj_pref_in_obj_position', 'both_pref'),
+		labels = c('p(s|S) > p(o|S)', 'p(o|O) > p(s|O)', 'Both')
+	) +
+	ylab('Pr. of sentences') +
+	expand_limits(y=c(0,1)) +
+	ggtitle('Pr. of sentences by voice and relative probabilities of arguments') +
+	facet_grid(data_source ~ mask_added_tokens + stop_at)
 
 ########################################################################
 ###################### PRE-FINE-TUNING (MODELS ONLY) ###################
@@ -1307,140 +1060,42 @@ filler |>
 	scale_fill_discrete('Target response') +
 	ggtitle(paste0('Pr. Correct by Voice (pre-fine-tuning, fillers)')) +
 	facet_grid(data_source ~ .)
-
-########################################################################
-###################### MOST RECENT SUBJECTS ############################
-########################################################################
-# accuracy
-exp |> 
-	s_mr() |>
-	ggplot(aes(x=voice, y=as.numeric(correct), fill=target_response)) +
+	
+filler.sents |>
+	droplevels() |>
+	mutate(
+		mask_added_tokens = as.factor(mask_added_tokens) |> fct_relevel('Mask blork', "Don't mask blork"),
+		voice = as.factor(voice) |> fct_relevel('SVO active', 'OVS passive'),
+		subj_pref_in_subj_position = logprob_correct_subj > logprob_wrong_obj,
+		obj_pref_in_obj_position = logprob_correct_obj > logprob_wrong_subj,
+		both_pref = subj_pref_in_subj_position & obj_pref_in_obj_position
+	) |>
+	pivot_longer(
+		c(subj_pref_in_subj_position, obj_pref_in_obj_position, both_pref),
+		names_to='preference'
+	) |>
+	mutate(
+		preference = as.factor(preference) |> 
+						fct_relevel('subj_pref_in_subj_position', 'obj_pref_in_obj_position', 'both_pref')
+	) |>
+	ggplot(aes(x=voice, y=as.numeric(value), fill=preference)) +
 	stat_summary(fun=mean, geom='bar', position='dodge', width=0.9) +
 	stat_summary(fun.data=beta_ci, geom='errorbar', width=0.33, position=position_dodge(0.9)) +
 	stat_summary(
 		fun.data=\(y) data.frame(y=mean(y), label=sprintf('%.2f', mean(y)), fill='white'), 
 		geom='label', position=position_dodge(0.9), show.legend=FALSE
 	) +
-	ylim(0, 1) +
 	scale_x_discrete(
 		'Template',
-		breaks = c('SVO active', 'OVS passive', 'OSV active'),
-		labels = c('SVO', 'OVS', '(OSV)')
+		breaks = c('SVO active', 'OVS passive'),
+		labels = c('SVO', 'OVS')
 	) +
-	ylab('Pr. Correct') +
-	scale_fill_discrete('Target response') +
-	ggtitle(paste0('Pr. Correct by Voice (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
-
-# log RTs
-exp |> 
-	s_mr() |>
-	filter(
-		data_source == 'human',
-		log.RT < log(MAX_RT_IN_SECONDS*1000)
-	) |>
-	group_by(subject) |>
-	mutate(sd.log.RT = sd(log.RT)) |>
-	filter(
-		log.RT < mean(log.RT) + (OUTLIER_RT_SDS * sd.log.RT), 
-		log.RT > mean(log.RT) - (OUTLIER_RT_SDS * sd.log.RT)
-	) |>
-	ungroup() |> 
-	ggplot(aes(x=voice, y=log.RT, fill=target_response)) +
-	geom_boxplot() +
-	scale_x_discrete(
-		'Template',
-		breaks = c('SVO active', 'OVS passive', 'OSV active'),
-		labels = c('SVO', 'OVS', '(OSV)')
+	scale_fill_discrete(
+		'Preference',
+		breaks = c('subj_pref_in_subj_position', 'obj_pref_in_obj_position', 'both_pref'),
+		labels = c('p(s|S) > p(o|S)', 'p(o|O) > p(s|O)', 'Both')
 	) +
-	ylab('Log RT') +
-	scale_fill_discrete('Target response') +
-	ggtitle(paste0(sprintf('Log RT by Voice (>%s sec and >%s s.d. from mean by subject removed)', MAX_RT_IN_SECONDS, OUTLIER_RT_SDS), ' (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
-
-# F scores
-exp |> 
-	s_mr() |>
-	select(
-		subject, data_source, mask_added_tokens, 
-		stop_at, voice, target_response, linear, f.score
-	) |>
-	distinct() |>
-	mutate(f.score = case_when(is.na(f.score) ~ 0, TRUE ~ f.score)) |>
-	ggplot(aes(x=voice, y=f.score, fill=target_response)) +
-	geom_boxplot(position='dodge', width=0.9) +
-	# geom_violin(position='dodge', width=0.9, alpha=0.3) +
-	ylim(0, 1) +
-	scale_x_discrete(
-		'Template',
-		breaks = c('SVO active', 'OVS passive', 'OSV active'),
-		labels = c('SVO', 'OVS', '(OSV)')
-	) +
-	ylab('F score') +
-	scale_fill_discrete('Target response') +
-	ggtitle(paste0('Subject F scores by Voice (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
-	
-# accuracy by session in training
-training.accuracy.by.session.no |>
-	s_mr() |>
-	ggplot(aes(x=as.factor(session.no), y=pr_first_choice_correct)) +
-	geom_bar(stat='identity') +
-	facet_grid(. ~ subject) +
-	xlab('Session No.') +
-	ylab('Pr. of trials where first choice was correct') +
-	geom_hline(yintercept=0.9, linetype='dashed', alpha=0.5) +
-	ggtitle('Subject performance in training phase') +
-	stat_summary(
-		fun.data=\(y) data.frame(y=y, label=sprintf('%.2f', y), fill='white'),
-		geom='label', show.legend=FALSE
-	)
-	
-
-###################### FILLERS ########################################
-# accuracy
-filler |> 
-	s_mr() |>
-	ggplot(aes(x=voice, y=as.numeric(correct), fill=target_response)) +
-	stat_summary(fun=mean, geom='bar', position='dodge', width=0.9) +
-	stat_summary(fun.data=beta_ci, geom='errorbar', width=0.33, position=position_dodge(0.9)) +
-	stat_summary(
-		fun.data=\(y) data.frame(y=mean(y), label=sprintf('%.2f', mean(y)), fill='white'), 
-		geom='label', position=position_dodge(0.9), show.legend=FALSE
-	) +
-	ylim(0, 1) +
-	scale_x_discrete(
-		'Template',
-		breaks = c('SVO active', 'OVS passive', 'OSV active'),
-		labels = c('SVO', 'OVS', '(OSV)')
-	) +
-	ylab('Pr. Correct') +
-	scale_fill_discrete('Target response') +
-	ggtitle(paste0('Pr. Correct by Voice (fillers) (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
-
-# log RTs
-filler |> 
-	s_mr() |>
-	filter(
-		data_source == 'human',
-		log.RT < log(MAX_RT_IN_SECONDS*1000)
-	) |>
-	group_by(subject) |>
-	mutate(sd.log.RT = sd(log.RT)) |>
-	filter(
-		log.RT < mean(log.RT) + (OUTLIER_RT_SDS * sd.log.RT), 
-		log.RT > mean(log.RT) - (OUTLIER_RT_SDS * sd.log.RT)
-	) |>
-	ungroup() |>
-	ggplot(aes(x=voice, y=log.RT, fill=target_response)) +
-	geom_boxplot() +
-	scale_x_discrete(
-		'Template',
-		breaks = c('SVO active', 'OVS passive', 'OSV active'),
-		labels = c('SVO', 'OVS', '(OSV)')
-	) +
-	ylab('Log RT') +
-	scale_fill_discrete('Target response') +
-	ggtitle(paste0('Log RT by Voice (>3 s.d. by subject removed, fillers) (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
+	ylab('Pr. of sentences') +
+	expand_limits(y=c(0,1)) +
+	ggtitle('Pr. of sentences by voice and relative probabilities of arguments (fillers)') +
+	facet_grid(data_source ~ mask_added_tokens + stop_at)
