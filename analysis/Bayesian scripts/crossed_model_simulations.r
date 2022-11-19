@@ -33,7 +33,7 @@ cis <- run.simulations(
 	data = results, 
 	name = name,
 	formula = correct ~ voice.n * data_source.n * target_response.n +
-		(1 + voice.n * target_response.n * seen_in_training.n | subject:data_source.n) +
+		(1 + voice.n * target_response.n | subject:data_source.n) +
 		(1 + data_source.n | item:voice.n:target_response.n),
 	family = bernoulli(),
 	prior = priors_crossed
