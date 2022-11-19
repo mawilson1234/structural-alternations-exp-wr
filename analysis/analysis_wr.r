@@ -268,10 +268,6 @@ model.results <- model.results |>
 		correct = odds_ratio > 0,
 		correct.pre.training = (odds_ratio - odds_ratio_pre_post_difference) > 0,
 		sentence = gsub('(\\D)(\\D+)', '\\U\\1\\L\\2', sentence, perl=TRUE),
-		# training = case_when(
-		# 				eval_data %like% 'blorked_ext' ~ 'SVO only',
-		# 				eval_data %like% 'SVO-OSV' ~ 'SVO+OSV',
-		# 			),
 		training = 'SVO+OSV',
 		seen_in_training = case_when(
 			token_type == 'tuning' ~ 'True',
@@ -299,7 +295,7 @@ model.results <- model.results |>
 			random_seed, 
 			c(
 				seq_len(max(0,as.numeric(as.character(results$subject)))),
-				py$model_results$random_seed |> unique()
+				model.results$random_seed |> unique()
 			)
 		),
 		args_group = case_when(
@@ -724,13 +720,10 @@ accuracy.data <- exp |>
 	) |>
 	select(
 		-word, -args_group, -mouse, -correct.pre.training,
-		-f.score, -sentence, -training, -adverb
+		-f.score, -sentence, -training, -adverb, -seen_in_training,
+		-linear
 	) |>
 	mutate(
-		seen_in_training.n = case_when(
-								seen_in_training == 'Seen'   ~  0.5,
-								seen_in_training == 'Unseen' ~ -0.5
-							),
 		target_response.n = case_when(
 								target_response == 'Object target'  ~  0.5,
 								target_response == 'Subject target' ~ -0.5
@@ -742,10 +735,6 @@ accuracy.data <- exp |>
 		voice.n = case_when(
 					voice == 'SVO active'  ~  0.5,
 					voice == 'OVS passive' ~ -0.5
-				),
-		linear.n = case_when(
-					linear %like% '^Non-linear' ~  0.5,
-					linear %like% '^Linear'     ~ -0.5
 				),
 		RT = exp(log.RT)
 	)

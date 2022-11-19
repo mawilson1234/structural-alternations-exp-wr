@@ -12,5 +12,5 @@ scripts/backup-power-analysis.sh
 scripts/backup.sh
 scripts/*/*.txt
 
-analysis/accuracy-data.csv
+# analysis/accuracy-data.csv
 analysis/*.csv.gz
