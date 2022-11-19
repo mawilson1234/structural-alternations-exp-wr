@@ -13,13 +13,12 @@ priors_crossed <- c(
 	set_prior('lkj(2)', class='cor'),
 	set_prior('normal(0, 1)', class = 'b', coef=unlist(
 		sapply(
-			c(1,2,3,4),
+			c(1,2,3),
 			\(i) combn(
 				c(
 					'voice.n', 
 					'data_source.n', 
-					'target_response.n', 
-					'seen_in_training.n'
+					'target_response.n'
 				),
 				m=i,
 				FUN=\(x) paste(x, collapse=':')
@@ -33,9 +32,9 @@ priors_crossed <- c(
 cis <- run.simulations(
 	data = results, 
 	name = name,
-	formula = correct ~ voice.n * data_source.n * target_response.n * seen_in_training.n +
-		(1 + voice.n * target_response.n * seen_in_training.n | data_source.n:subject) +
-		(1 + data_source.n | voice.n:target_response.n:seen_in_training.n:item),
+	formula = correct ~ voice.n * data_source.n * target_response.n +
+		(1 + voice.n * target_response.n * seen_in_training.n | subject:data_source.n) +
+		(1 + data_source.n | item:voice.n:target_response.n),
 	family = bernoulli(),
 	prior = priors_crossed
 )

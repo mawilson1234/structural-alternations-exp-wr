@@ -5,7 +5,7 @@ library(forcats)
 library(gridExtra)
 
 CI_RANGE <- 0.95
-TARGET_CI_WIDTH <- 2
+TARGET_CI_WIDTH <- 3
 
 N_HUMAN_PARTICIPANTS_PER_RUN <- sort(c(35, seq(from=30, to=80, by=10)))
 N_RUNS_PER_SIZE <- 10
@@ -90,7 +90,7 @@ brm.args <- list(
 	iter=6500, chains=4, cores=4,
 	backend='cmdstanr', threads=threading(4),
 	control=list(adapt_delta=0.99),
-	seed=425, refresh=1
+	seed=425, refresh=650
 )
 
 get.duplicated.data <- function(
@@ -219,7 +219,7 @@ run.simulations <- function(data, name, ...) {
 		
 		save_model_summaries(
 			models,
-			filename=sprintf(paste0(name, '_summaries_%02d_hp.txt'), n.participants), 
+			filename=file.path(models.dir, sprintf(paste0(name, '_summaries_%02d_hp.txt'), n.participants)), 
 			overwrite=TRUE
 		)
 	}

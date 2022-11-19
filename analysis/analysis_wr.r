@@ -7,17 +7,13 @@ library(tidyverse)
 library(data.table)
 library(reticulate)
 
-# Create directories to store results
-current.exp <- 'wr'
-plots.dir 	<- 'Plots'
-models.dir 	<- 'Models'
-dir.create(plots.dir, 	showWarnings=FALSE, recursive=TRUE)
-dir.create(models.dir, 	showWarnings=FALSE, recursive=TRUE)
-
-MOST_RECENT_SUBJECTS <- 7:9
-
+# do not change these
+SUBJECTS_RUN_WITH_BAD_DELAY <- 4:9
 MAX_RT_IN_SECONDS <- 10
 OUTLIER_RT_SDS <- 2
+
+current.exp <- 'wr'
+MOST_RECENT_SUBJECTS <- 19:24
 
 # confidence interval for beta distribution
 beta_ci <- function(y, ci=0.95) {
@@ -70,7 +66,8 @@ results <- results |>
 		subject = as.numeric(as.character(subject)),
 		subject = match(subject, unique(subject)),
 		subject = as.factor(subject)
-	)
+	) |>
+	filter(!subject %in% SUBJECTS_RUN_WITH_BAD_DELAY)
 
 # add columns so that models can be added
 results <- results |>
@@ -107,7 +104,7 @@ breaktimes <- results |>
 # for some subjects, this is inaccurate due to
 # a bug in the way PCIbex records results
 # with identical trial labels. the training
-# repitition criteria worked correctly
+# repetition criteria worked correctly
 training.accuracy.by.session.no <- results |>
 	filter(
 		condition %like% 'trial_train',
@@ -179,7 +176,10 @@ results <- results |>
 	mutate(
 		Trial_Start = as.numeric(Trial_Start),
 		Trial_End = as.numeric(Trial_End),
-		sentence_delay = (str_count(sentence, ' ') + 1) * 325,
+		sentence_delay = case_when(
+			subject %in% SUBJECTS_RUN_WITH_BAD_DELAY ~ (str_count(sentence, ' ') + 1),
+			TRUE ~ (str_count(sentence, ' ') + 1) * 325
+		),
 		log.RT = log(Trial_End - sentence_delay - Trial_Start)
 	) |> 
 	select(-Trial_Start, -Trial_End, -sentence_delay)
@@ -661,7 +661,7 @@ f.scores.pre.training <- exp |>
 									TRUE ~ FALSE
 								)
 	) |>
-	dplyr::summarize(
+	summarize(
 		true.positives.subjects = sum(correct.pre.training[target_response == 'Subject target']),
 		true.positives.objects  = sum(correct.pre.training[target_response == 'Object target']),
 		false.positives.subjects = sum(false.positives.subjects),
@@ -1314,6 +1314,12 @@ filler |>
 # accuracy
 exp |> 
 	s_mr() |>
+	mutate(
+		included = case_when(
+			subject %in% excluded.for.reasons.other.than.nonlinear$subject ~ 'Excluded',
+			TRUE ~ 'Included'
+		)
+	) |>
 	ggplot(aes(x=voice, y=as.numeric(correct), fill=target_response)) +
 	stat_summary(fun=mean, geom='bar', position='dodge', width=0.9) +
 	stat_summary(fun.data=beta_ci, geom='errorbar', width=0.33, position=position_dodge(0.9)) +
@@ -1330,11 +1336,17 @@ exp |>
 	ylab('Pr. Correct') +
 	scale_fill_discrete('Target response') +
 	ggtitle(paste0('Pr. Correct by Voice (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
+	facet_grid(. ~ paste0(subject, ' (', included, ')') + linear)
 
 # log RTs
 exp |> 
 	s_mr() |>
+	mutate(
+		included = case_when(
+			subject %in% excluded.for.reasons.other.than.nonlinear$subject ~ 'Excluded',
+			TRUE ~ 'Included'
+		)
+	) |>
 	filter(
 		data_source == 'human',
 		log.RT < log(MAX_RT_IN_SECONDS*1000)
@@ -1355,52 +1367,52 @@ exp |>
 	) +
 	ylab('Log RT') +
 	scale_fill_discrete('Target response') +
-	ggtitle(paste0(sprintf('Log RT by Voice (>%s sec and >%s s.d. from mean by subject removed)', MAX_RT_IN_SECONDS, OUTLIER_RT_SDS), ' (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
-
-# F scores
-exp |> 
-	s_mr() |>
-	select(
-		subject, data_source, mask_added_tokens, 
-		stop_at, voice, target_response, linear, f.score
-	) |>
-	distinct() |>
-	mutate(f.score = case_when(is.na(f.score) ~ 0, TRUE ~ f.score)) |>
-	ggplot(aes(x=voice, y=f.score, fill=target_response)) +
-	geom_boxplot(position='dodge', width=0.9) +
-	# geom_violin(position='dodge', width=0.9, alpha=0.3) +
-	ylim(0, 1) +
-	scale_x_discrete(
-		'Template',
-		breaks = c('SVO active', 'OVS passive', 'OSV active'),
-		labels = c('SVO', 'OVS', '(OSV)')
+	ggtitle(
+		paste0(
+			sprintf('Log RT by Voice (>%s sec and >%s s.d. from mean by subject removed)', MAX_RT_IN_SECONDS, OUTLIER_RT_SDS), 
+			' (', 
+			MOST_RECENT_SUBJECTS[[1]], 
+			'–', 
+			MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], 
+			')'
+		)
 	) +
-	ylab('F score') +
-	scale_fill_discrete('Target response') +
-	ggtitle(paste0('Subject F scores by Voice (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
-	
+	facet_grid(. ~ paste0(subject, ' (', included, ')') + linear)
+
 # accuracy by session in training
 training.accuracy.by.session.no |>
+	mutate(session.no = as.factor(session.no)) |>
+	complete(session.no) |>
 	s_mr() |>
-	ggplot(aes(x=as.factor(session.no), y=pr_first_choice_correct)) +
+	mutate(
+		included = case_when(
+			subject %in% excluded.for.reasons.other.than.nonlinear$subject ~ 'Excluded',
+			TRUE ~ 'Included'
+		)
+	) |>
+	ggplot(aes(x=session.no, y=pr_first_choice_correct)) +
 	geom_bar(stat='identity') +
-	facet_grid(. ~ subject) +
+	facet_grid(. ~ paste0(subject, ' (', included, ')')) +
 	xlab('Session No.') +
 	ylab('Pr. of trials where first choice was correct') +
+	expand_limits(y=c(0,1)) +
 	geom_hline(yintercept=0.9, linetype='dashed', alpha=0.5) +
 	ggtitle('Subject performance in training phase') +
 	stat_summary(
 		fun.data=\(y) data.frame(y=y, label=sprintf('%.2f', y), fill='white'),
 		geom='label', show.legend=FALSE
 	)
-	
 
 ###################### FILLERS ########################################
 # accuracy
 filler |> 
 	s_mr() |>
+	mutate(
+		included = case_when(
+			subject %in% excluded.for.reasons.other.than.nonlinear$subject ~ 'Excluded',
+			TRUE ~ 'Included'
+		)
+	) |>
 	ggplot(aes(x=voice, y=as.numeric(correct), fill=target_response)) +
 	stat_summary(fun=mean, geom='bar', position='dodge', width=0.9) +
 	stat_summary(fun.data=beta_ci, geom='errorbar', width=0.33, position=position_dodge(0.9)) +
@@ -1417,7 +1429,7 @@ filler |>
 	ylab('Pr. Correct') +
 	scale_fill_discrete('Target response') +
 	ggtitle(paste0('Pr. Correct by Voice (fillers) (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
+	facet_grid(. ~ paste0(subject, ' (', included, ')') + linear)
 
 # log RTs
 filler |> 
@@ -1443,4 +1455,4 @@ filler |>
 	ylab('Log RT') +
 	scale_fill_discrete('Target response') +
 	ggtitle(paste0('Log RT by Voice (>3 s.d. by subject removed, fillers) (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ subject + linear)
+	facet_grid(. ~ paste0(subject, ' (', included, ')' + linear)
