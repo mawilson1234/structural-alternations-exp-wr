@@ -9,31 +9,15 @@ results <- read.csv('accuracy-data.csv') |>
 		item 	= as.factor(item)
 	)
 
-priors_crossed <- c(
-	set_prior('normal(0, 10)', class='Intercept'),
-	set_prior('lkj(2)', class='cor'),
-	set_prior('normal(0, 1)', class = 'b', coef=unlist(
-		sapply(
-			c(1,2,3,4),
-			\(i) combn(
-				c(
-					'voice.n', 
-					'data_source.n', 
-					'target_response.n', 
-					'seen_in_training.n'
-				),
-				m=i,
-				FUN=\(x) paste(x, collapse=':')
-			)
-		)
-	))
-)
-
 brm.args <- list(
-	iter=6500, chains=4, cores=4,
-	backend='cmdstanr', threads=threading(4),
+	iter=6500, 
+	chains=4, 
+	cores=4,
+	backend='cmdstanr', 
+	threads=threading(4, static=TRUE),
 	control=list(adapt_delta=0.99),
-	seed=425, refresh=1
+	seed=425, 
+	refresh=650
 )
 
 # generate a list of n.human.subjects integers
@@ -77,7 +61,6 @@ for (i in seq_along(model.lists)) {
 			(1 + data_source.n | voice.n:target_response.n:seen_in_training.n:item),
 		data = results |> filter(data_source == 'human' | subject %in% model.lists[[i]]),
 		family = bernoulli(),
-		prior = priors_crossed,
 		file = file.path(models.dir, sprintf('crossed_model_accuracy_%02d.rds', i))
 	))) |> list()
 }

@@ -14,3 +14,4 @@ scripts/*/*.txt
 
 # analysis/accuracy-data.csv
 analysis/*.csv.gz
+analysis/test-priors.r

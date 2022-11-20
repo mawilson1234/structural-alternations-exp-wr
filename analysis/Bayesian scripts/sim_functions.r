@@ -87,10 +87,14 @@ get.lists <- function(n.participants, n.runs, sample.from) {
 }
 
 brm.args <- list(
-	iter=6500, chains=4, cores=4,
-	backend='cmdstanr', threads=threading(4),
+	iter=6500, 
+	chains=4, 
+	cores=4,
+	backend='cmdstanr', 
+	threads=threading(4, static=TRUE),
 	control=list(adapt_delta=0.99),
-	seed=425, refresh=650
+	seed=425, 
+	refresh=650
 )
 
 get.duplicated.data <- function(

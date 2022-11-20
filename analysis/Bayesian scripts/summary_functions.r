@@ -215,8 +215,8 @@ save_model_plots <- function(models = list()) {
 		ggexport(
 			plotlist = plots,
 			filename = file.path(plots.dir, sprintf('%s_plots.pdf', gsub(' ', '_', tolower(model_name)))),
-			width = 15
-,			height = 12,
+			width = 15,
+			height = 12,
 			scale = 0.9
 		)
 	}
