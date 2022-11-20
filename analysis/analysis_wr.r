@@ -203,7 +203,7 @@ results <- results |>
 
 # get unique item identifiers to add to the model results
 item.ids <- results |>
-	select(item, condition, word, args_group, sentence_type) |>
+	select(item, condition, word, args_group, sentence_type, adverb) |>
 	distinct() |> 
 	mutate(item = as.numeric(as.character(item))) |>
 	arrange(item)
@@ -317,7 +317,8 @@ model.results <- model.results |>
 		sentence, adverb, seen_in_training, data_source, mouse, response, log.RT,
 		correct, correct.pre.training, voice, mask_added_tokens, stop_at, model_id
 	) |> 
-	arrange(subject, item, word, adverb)
+	arrange(subject, item, word, adverb) |>
+	filter(!is.na(item))
 
 # merge model results with human results
 results <- results |> 
@@ -1005,7 +1006,7 @@ exp |>
 ########################################################################
 # pre-fine-tuning accuracy by voice, target_response, and data_source
 exp |> 
-	filter(data_source != 'human') |>
+	filter(data_source == 'BERT') |>
 	select(-correct) |> 
 	droplevels() |>
 	rename(correct = correct.pre.training) |>

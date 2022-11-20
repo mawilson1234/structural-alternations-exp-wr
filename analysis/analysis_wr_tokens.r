@@ -173,7 +173,7 @@ get_sentences_results <- function(df, file) {
 		cat('\n\n')
 	}
 	
-	write.csv(new.df, file, row.names=FALSE)
+	fwrite(new.df, file, row.names=FALSE)
 	
 	return (new.df)
 }
@@ -513,6 +513,24 @@ exp <- exp |>
 		f.scores.pre.training |>
 			select(subject, voice, target_response, f.score) |>
 			rename(f.score.pre.training = f.score)	
+	)
+
+exp <- exp |>
+	mutate(
+		voice = as.factor(voice) |>
+			fct_relevel('SVO active', 'OVS passive', 'OSV active'),
+		target_response = case_when(
+				target_response == '[subj]' ~ 'Subject target',
+				TRUE ~ 'Object target'
+			) |>
+			as.factor() |>
+			fct_relevel('Subject target', 'Object target')
+	)
+
+exp.sents <- exp.sents |>
+	mutate(
+		voice = as.factor(voice) |>
+			fct_relevel('SVO active', 'OVS passive', 'OSV active')
 	)
 
 linear_labels_no_humans <- geom_text(
@@ -895,6 +913,44 @@ exp |>
 	ggtitle(paste0('Subject F scores by Voice (pre-fine-tuning)')) +
 	facet_grid(data_source ~ mask_added_tokens + stop_at + linear)
 
+exp.sents |>
+	mutate(
+		mask_added_tokens = as.factor(mask_added_tokens) |> fct_relevel('Mask blork', "Don't mask blork"),
+		voice = as.factor(voice) |> fct_relevel('SVO active', 'OVS passive', 'OSV active'),
+		subj_pref_in_subj_position = logprob_correct_subj > logprob_wrong_obj,
+		obj_pref_in_obj_position = logprob_correct_obj > logprob_wrong_subj,
+		both_pref = subj_pref_in_subj_position & obj_pref_in_obj_position
+	) |>
+	pivot_longer(
+		c(subj_pref_in_subj_position, obj_pref_in_obj_position, both_pref),
+		names_to='preference'
+	) |>
+	mutate(
+		preference = as.factor(preference) |> 
+						fct_relevel('subj_pref_in_subj_position', 'obj_pref_in_obj_position', 'both_pref')
+	) |>
+	ggplot(aes(x=voice, y=as.numeric(value), fill=preference)) +
+	stat_summary(fun=mean, geom='bar', position='dodge', width=0.9) +
+	stat_summary(fun.data=beta_ci, geom='errorbar', width=0.33, position=position_dodge(0.9)) +
+	stat_summary(
+		fun.data=\(y) data.frame(y=mean(y), label=sprintf('%.2f', mean(y)), fill='white'), 
+		geom='label', position=position_dodge(0.9), show.legend=FALSE
+	) +
+	scale_x_discrete(
+		'Template',
+		breaks = c('SVO active', 'OVS passive', 'OSV active'),
+		labels = c('SVO', 'OVS', '(OSV)')
+	) +
+	scale_fill_discrete(
+		'Preference',
+		breaks = c('subj_pref_in_subj_position', 'obj_pref_in_obj_position', 'both_pref'),
+		labels = c('p(s|S) > p(o|S)', 'p(o|O) > p(s|O)', 'Both')
+	) +
+	ylab('Pr. of sentences') +
+	expand_limits(y=c(0,1)) +
+	ggtitle('Pr. of sentences by voice and relative probabilities of arguments') +
+	facet_grid(data_source ~ mask_added_tokens + stop_at)
+
 ########################################################################
 ###################### FILLERS #########################################
 ########################################################################
@@ -1060,7 +1116,7 @@ filler |>
 	scale_fill_discrete('Target response') +
 	ggtitle(paste0('Pr. Correct by Voice (pre-fine-tuning, fillers)')) +
 	facet_grid(data_source ~ .)
-	
+
 filler.sents |>
 	droplevels() |>
 	mutate(

@@ -21,7 +21,7 @@ beta_ci <- function(y, ci=0.95) {
 	return(df)
 }
 
-model.results <- fread('results-models-sents.csv.gz') |> 
+model.results <- fread('results-models-sents.csv.gz') |>
 	as_tibble() |>
 	mutate(data_source = gsub('(B|b)ert', 'BERT', str_to_title(model_name)))
 
@@ -88,6 +88,7 @@ results <- model.results |>
 		subject = as.factor(subject),
 		args_group = paste(gsub('\\_', '+', args_group), 'args') |> 
 						fct_relevel(
+							'red+white args',
 							'white+red args',
 							'eat args',
 							'regret args',
