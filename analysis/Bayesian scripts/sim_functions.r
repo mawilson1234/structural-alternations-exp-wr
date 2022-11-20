@@ -223,7 +223,7 @@ run.simulations <- function(data, name, ...) {
 		
 		save_model_summaries(
 			models,
-			filename=file.path(models.dir, sprintf(paste0(name, '_summaries_%02d_hp.txt'), n.participants)), 
+			filename=sprintf(paste0(name, '_summaries_%02d_hp.txt'), n.participants), 
 			overwrite=TRUE
 		)
 	}
