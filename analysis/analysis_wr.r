@@ -13,7 +13,7 @@ MAX_RT_IN_SECONDS <- 10
 OUTLIER_RT_SDS <- 2
 
 current.exp <- 'wr'
-MOST_RECENT_SUBJECTS <- 19:24
+MOST_RECENT_SUBJECTS <- 28:31
 
 # confidence interval for beta distribution
 beta_ci <- function(y, ci=0.95) {
@@ -1424,6 +1424,12 @@ filler |>
 # log RTs
 filler |> 
 	s_mr() |>
+	mutate(
+		included = case_when(
+			subject %in% excluded.for.reasons.other.than.nonlinear$subject ~ 'Excluded',
+			TRUE ~ 'Included'
+		)
+	) |>
 	filter(
 		data_source == 'human',
 		log.RT < log(MAX_RT_IN_SECONDS*1000)
@@ -1444,5 +1450,13 @@ filler |>
 	) +
 	ylab('Log RT') +
 	scale_fill_discrete('Target response') +
-	ggtitle(paste0('Log RT by Voice (>3 s.d. by subject removed, fillers) (', MOST_RECENT_SUBJECTS[[1]], '–', MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], ')')) +
-	facet_grid(. ~ paste0(subject, ' (', included, ')' + linear)
+	ggtitle(
+		paste0(
+			'Log RT by Voice (>3 s.d. by subject removed, fillers) (', 
+			MOST_RECENT_SUBJECTS[[1]], 
+			'–', 
+			MOST_RECENT_SUBJECTS[[length(MOST_RECENT_SUBJECTS)]], 
+			')'
+		)
+	) +
+	facet_grid(. ~ paste0(subject, ' (', included, ')') + linear)
