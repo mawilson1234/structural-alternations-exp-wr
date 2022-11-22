@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=salts_exp_bayes-nested-cossims_02
+#SBATCH --job-name=salts_exp_bayes-nested-cossims_max_01
 #SBATCH --output=joblogs/%x_%j.txt
 #SBATCH --nodes=1
 #SBATCH --ntasks=4
@@ -12,8 +12,8 @@
 
 module load R/4.1.0-foss-2020b
 
-echo Running script: scripts/bayesian_analysis_nested_cossims_02.sh
+echo Running script: scripts/bayesian_analysis_nested_cossims_max_01.sh
 
 cd analysis/
 
-Rscript Bayesian\ scripts/models-cossims/models_nested_cossims_02.r
+Rscript Bayesian\ scripts/models-cossims_max/models_nested_cossims_max_01.r

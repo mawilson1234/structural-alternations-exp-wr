@@ -13,7 +13,7 @@ MAX_RT_IN_SECONDS <- 10
 OUTLIER_RT_SDS <- 2
 
 current.exp <- 'wr'
-MOST_RECENT_SUBJECTS <- 28:31
+MOST_RECENT_SUBJECTS <- 32:41
 
 # confidence interval for beta distribution
 beta_ci <- function(y, ci=0.95) {
@@ -511,12 +511,15 @@ cossim.means <- cossim.results |>
 	mutate(eval_epoch = case_when(eval_epoch == 0 ~ as.character(eval_epoch), TRUE ~ epoch_criteria)) |>
 	group_by(model_id, target_group, eval_epoch) |>
 	summarize(mean_cossim_to_targets = mean(cossim)) |>
-	filter(
-		eval_epoch != 0,
-		target_group == 'BLORKED'
-	) |> 
+	filter(target_group == 'BLORKED') |> 
 	ungroup() |>
-	select(-target_group, -eval_epoch)
+	select(-target_group) |>
+	mutate(eval_epoch = case_when(eval_epoch == '0' ~ '_pre.training', TRUE ~ '')) |>
+	pivot_wider(
+		names_from=eval_epoch, 
+		values_from=c(max_cossim_to_targets, mean_cossim_to_targets),
+		names_sep=''
+	)
 
 results <- results |>
 	left_join(cossim.means)
@@ -1001,6 +1004,133 @@ exp |>
 	ggtitle(paste0('Pr. Correct by mean cosine similarity to blorked targets')) +
 	facet_grid2(data_source ~ mask_added_tokens + stop_at + linear + voice + target_response, scales='free_x', independent='x')
 
+# mean accuracy by max cosine similarity to targets (models only)
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	group_by(subject, data_source, voice, target_response, max_cossim_to_targets, mask_added_tokens, stop_at) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=max_cossim_to_targets, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Max cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by max cosine similarity to blorked targets')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + voice,
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by max cosine similarity to targets (models only) and linear
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	group_by(
+		subject, data_source, voice, target_response, 
+		max_cossim_to_targets, linear, mask_added_tokens, stop_at
+	) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=max_cossim_to_targets, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Max cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by max cosine similarity to blorked targets')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + linear + voice, 
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by mean cosine similarity difference to targets (models only)
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	mutate(mean_cossim_to_targets = mean_cossim_to_targets - mean_cossim_to_targets_pre.training) |>
+	group_by(subject, data_source, voice, target_response, mean_cossim_to_targets, mask_added_tokens, stop_at) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=mean_cossim_to_targets, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Difference in mean cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by difference in mean cosine similarity to blorked targets')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + voice,
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by mean cosine similarity difference to targets (models only) and linear
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	mutate(mean_cossim_to_targets = mean_cossim_to_targets - mean_cossim_to_targets_pre.training) |>
+	group_by(
+		subject, data_source, voice, target_response, 
+		mean_cossim_to_targets, linear, mask_added_tokens, stop_at
+	) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=mean_cossim_to_targets, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Difference in mean cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by difference in mean cosine similarity to blorked targets')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + linear + voice, 
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by max cosine similarity difference to targets (models only)
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	mutate(max_cossim_to_targets = max_cossim_to_targets - max_cossim_to_targets_pre.training) |>
+	group_by(subject, data_source, voice, target_response, max_cossim_to_targets, mask_added_tokens, stop_at) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=max_cossim_to_targets, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Difference in max cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by difference in max cosine similarity to blorked targets')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + voice,
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by max cosine similarity difference to targets (models only) and linear
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	mutate(max_cossim_to_targets = max_cossim_to_targets - max_cossim_to_targets_pre.training) |>
+	group_by(
+		subject, data_source, voice, target_response, 
+		max_cossim_to_targets, linear, mask_added_tokens, stop_at
+	) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=max_cossim_to_targets, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Difference in max cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by difference in max cosine similarity to blorked targets')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + linear + voice, 
+		scales='free_x', independent='x'
+	)
+
 ########################################################################
 ###################### PRE-FINE-TUNING (MODELS ONLY) ###################
 ########################################################################
@@ -1131,6 +1261,88 @@ exp |>
 	scale_fill_discrete('Target response') +
 	ggtitle(paste0('Subject F scores by Voice (pre-fine-tuning)')) +
 	facet_grid(data_source ~ mask_added_tokens + stop_at + linear)
+
+# mean accuracy by mean cosine similarity to targets (models only)
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	group_by(subject, data_source, voice, target_response, mean_cossim_to_targets_pre.training, mask_added_tokens, stop_at) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=mean_cossim_to_targets_pre.training, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Mean cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by mean cosine similarity to blorked targets (pre-fine-tuning)')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + voice,
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by mean cosine similarity to targets (models only) and linear
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	group_by(
+		subject, data_source, voice, target_response, 
+		mean_cossim_to_targets_pre.training, linear, mask_added_tokens, stop_at
+	) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=mean_cossim_to_targets.pre.training, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Mean cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by mean cosine similarity to blorked targets (pre-fine-tuning)')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + linear + voice, 
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by max cosine similarity to targets (models only)
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	group_by(subject, data_source, voice, target_response, max_cossim_to_targets_pre.training, mask_added_tokens, stop_at) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=max_cossim_to_targets_pre.training, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Max cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by max cosine similarity to blorked targets (pre-fine-tuning)')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + voice,
+		scales='free_x', independent='x'
+	)
+
+# mean accuracy by max cosine similarity to targets (models only) and linear
+exp |>
+	filter(data_source != 'human', stop_at == 'convergence', mask_added_tokens == "Don't mask blork") |>
+	droplevels() |>
+	group_by(
+		subject, data_source, voice, target_response, 
+		max_cossim_to_targets_pre.training, linear, mask_added_tokens, stop_at
+	) |>
+	summarize(correct = mean(correct)) |>
+	ggplot(aes(x=max_cossim_to_targets, y=as.numeric(correct), fill=target_response)) +
+	geom_point(shape=21, cex=2) +
+	geom_smooth(method='lm') +
+	expand_limits(y=c(0,1)) +
+	xlab('Max cosine similarity to best targets for blorked (determined pre-fine-tuning)') +
+	ylab('Pr. Correct') +
+	scale_fill_discrete('Target response') +
+	ggtitle(paste0('Pr. Correct by max cosine similarity to blorked targets (pre-fine-tuning)')) +
+	facet_grid2(
+		data_source ~ mask_added_tokens + stop_at + linear + voice, 
+		scales='free_x', independent='x'
+	)
 
 ########################################################################
 ###################### FILLERS #########################################

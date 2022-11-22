@@ -646,6 +646,14 @@ fit.model <- function(
 	model.formulae <- readRDS(file.path('Bayesian scripts', formulae.file))
 	name <- names(model.formulae)[[formula.no]]
 	formula <- model.formulae[[name]]
+	effects <- attr(terms(formula), 'term.labels')
+	fixef <- effects[!grepl('^1|0 + ', effects)]
+	priors <- c(
+		set_prior('normal(0, 10)', class='Intercept'),
+		set_prior('lkj(2)', class='cor'),
+		set_prior('normal(0, 10)', class = 'b', coef=fixef),
+		set_prior('normal(0, 10)', class = 'sd')
+	)
 	
 	models <- list()
 	i <- model.no
@@ -696,6 +704,7 @@ fit.model <- function(
 		formula = formula,
 		data = results |> filter(data_source == 'human' | subject %in% model.lists[[i]]),
 		family = family,
+		prior = priors,
 		file = file.path(model.dir, paste0(out.file, '.rds'))
 	))) |> list()
 	
