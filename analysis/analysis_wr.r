@@ -13,7 +13,7 @@ MAX_RT_IN_SECONDS <- 10
 OUTLIER_RT_SDS <- 2
 
 current.exp <- 'wr'
-MOST_RECENT_SUBJECTS <- 32:41
+MOST_RECENT_SUBJECTS <- 47
 
 # confidence interval for beta distribution
 beta_ci <- function(y, ci=0.95) {
@@ -510,7 +510,10 @@ cossim.means <- cossim.results |>
 	) |>
 	mutate(eval_epoch = case_when(eval_epoch == 0 ~ as.character(eval_epoch), TRUE ~ epoch_criteria)) |>
 	group_by(model_id, target_group, eval_epoch) |>
-	summarize(mean_cossim_to_targets = mean(cossim)) |>
+	summarize(
+		max_cossim_to_targets = max(cossim),
+		mean_cossim_to_targets = mean(cossim)
+	) |>
 	filter(target_group == 'BLORKED') |> 
 	ungroup() |>
 	select(-target_group) |>
