@@ -5,9 +5,9 @@ library(forcats)
 library(gridExtra)
 
 CI_RANGE <- 0.95
-TARGET_CI_WIDTH <- 3
+TARGET_CI_WIDTH <- 7
 
-N_HUMAN_PARTICIPANTS_PER_RUN <- seq(from=30, to=50, by=5)
+N_HUMAN_PARTICIPANTS_PER_RUN <- c(seq(from=30, to=40, by=5), seq(from=50, to=80, by=10))
 N_RUNS_PER_SIZE <- 10
 
 plots.dir <- 'Plots/Bayesian simulations'
