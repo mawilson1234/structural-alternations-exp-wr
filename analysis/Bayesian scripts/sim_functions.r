@@ -7,7 +7,7 @@ library(gridExtra)
 CI_RANGE <- 0.95
 TARGET_CI_WIDTH <- 3
 
-N_HUMAN_PARTICIPANTS_PER_RUN <- sort(c(35, seq(from=20, to=80, by=10)))
+N_HUMAN_PARTICIPANTS_PER_RUN <- seq(from=30, to=40, by=5)
 N_RUNS_PER_SIZE <- 10
 
 plots.dir <- 'Plots/Bayesian simulations'
@@ -154,6 +154,26 @@ run.simulations <- function(data, name, ...) {
 		median = numeric(0)
 	)
 	
+	priors <- c(
+		set_prior('normal(0, 10)', class='Intercept'),
+		set_prior('lkj(2)', class='cor'),
+		set_prior('normal(0, 10)', class = 'b', coef=unlist(
+			sapply(
+				c(1,2,3),
+				\(i) combn(
+					c(
+						'voice.n', 
+						'data_source.n', 
+						'target_response.n'
+					),
+					m=i,
+					FUN=\(x) paste(x, collapse=':')
+				)
+			)
+		)),
+		set_prior('normal(0, 10)', class = 'sd')
+	)
+	
 	human.subject.ids <- data |>
 		filter(data_source == 'human') |>
 		droplevels() |>
@@ -197,6 +217,7 @@ run.simulations <- function(data, name, ...) {
 			
 			models[model_name] <- do.call(brm, append(brm.args, list(
 				...,
+				prior = priors,
 				data = results.with.duplicates |> filter(data_source == 'human' | subject %in% model.lists[[i]]),
 				file = file.path(models.dir, sprintf(paste0(name, '_%02d_hp_%02d.rds'), n.participants, i))
 			))) |> list()
