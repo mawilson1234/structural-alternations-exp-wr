@@ -13,6 +13,7 @@ results <- read.csv('accuracy-data.csv') |>
 cis <- run.simulations(
 	data = results, 
 	name = name,
+	groups = c('voice.n', 'data_source.n', 'target_response.n'),
 	formula = correct ~ voice.n * data_source.n * target_response.n +
 		(1 + voice.n * target_response.n | subject:data_source.n) +
 		(1 + data_source.n | item:voice.n:target_response.n),

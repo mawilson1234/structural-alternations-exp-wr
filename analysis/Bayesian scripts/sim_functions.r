@@ -7,7 +7,7 @@ library(gridExtra)
 CI_RANGE <- 0.95
 TARGET_CI_WIDTH <- 3
 
-N_HUMAN_PARTICIPANTS_PER_RUN <- seq(from=30, to=40, by=5)
+N_HUMAN_PARTICIPANTS_PER_RUN <- seq(from=30, to=50, by=5)
 N_RUNS_PER_SIZE <- 10
 
 plots.dir <- 'Plots/Bayesian simulations'
@@ -101,7 +101,8 @@ get.duplicated.data <- function(
 	data, 
 	model.list, 
 	human.list, 
-	n.participants
+	n.participants,
+	groups = ''
 ) {
 	n.each.model <- table(model.list)
 	n.each.model <- n.each.model[n.each.model > 0]
@@ -112,23 +113,43 @@ get.duplicated.data <- function(
 	results.with.duplicates <- data.frame(matrix(ncol=length(colnames(data)), nrow=0))
 	colnames(results.with.duplicates) <- colnames(data)
 	
+	groups <- groups[groups != '']
+	
 	dupe_string <- ''
 	while (length(results.with.duplicates$subject |> unique()) < (n.participants * 2)) {
 		models.to.duplicate <- names(n.each.model)[n.each.model > 0]
 		humans.to.duplicate <- names(n.each.human)[n.each.human > 0]
 		to.duplicate <- c(humans.to.duplicate, models.to.duplicate)
 		
-		results.with.duplicates <- rbind(
-				results.with.duplicates,
-				data |> 
-					filter(subject %in% to.duplicate) |>
-					mutate(
-						subject = case_when(
-							subject %in% unique(results.with.duplicates$subject) ~ paste0(as.character(subject), dupe_string),
-							TRUE ~ as.character(subject)
-						)
-					)
+		new_data <- data |> 
+			filter(subject %in% to.duplicate) |>
+			mutate(
+				subject = case_when(
+					subject %in% unique(results.with.duplicates$subject) ~ paste0(as.character(subject), dupe_string),
+					TRUE ~ as.character(subject)
+				)
 			)
+		
+		# the first run through, we use the actual data
+		# for subsequent runs, we want to sample from the 
+		# distributions of the subjects we duplicated
+		if (dupe_string != '' & !is_empty(groups)) {
+			probs_of_success <- new_data |> 
+				group_by(subject, across(all_of(groups))) |>
+				summarize(pr.correct = mean(correct))
+			
+			new_data <- new_data |>
+				left_join(probs_of_success) |>
+				rowwise() |>
+				mutate(correct = as.logical(rbinom(1, 1, pr.correct))) |> 
+				ungroup() |>
+				select(-pr.correct)
+		}
+		
+		results.with.duplicates <- rbind(
+			results.with.duplicates,
+			new_data
+		)
 		
 		n.each.model <- n.each.model - 1
 		n.each.model <- n.each.model[n.each.model > 0]
@@ -144,7 +165,7 @@ get.duplicated.data <- function(
 	return (results.with.duplicates)
 }
 
-run.simulations <- function(data, name, ...) {
+run.simulations <- function(data, name, groups = '', ...) {
 	cis <- data.frame(
 		model.number = integer(0),
 		effect = character(0),
@@ -212,7 +233,8 @@ run.simulations <- function(data, name, ...) {
 					data=data, 
 					model.list=model.lists[[i]], 
 					human.list=human.lists[[i]], 
-					n.participants=n.participants
+					n.participants=n.participants,
+					groups=groups
 				)
 			
 			models[model_name] <- do.call(brm, append(brm.args, list(
