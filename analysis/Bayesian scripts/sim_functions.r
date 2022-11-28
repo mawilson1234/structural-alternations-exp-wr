@@ -7,7 +7,7 @@ library(gridExtra)
 CI_RANGE <- 0.95
 TARGET_CI_WIDTH <- 7
 
-N_HUMAN_PARTICIPANTS_PER_RUN <- c(seq(from=30, to=40, by=5), seq(from=50, to=80, by=10))
+N_HUMAN_PARTICIPANTS_PER_RUN <- c(200, 150, 100)
 N_RUNS_PER_SIZE <- 10
 
 plots.dir <- 'Plots/Bayesian simulations'
@@ -91,7 +91,7 @@ brm.args <- list(
 	chains=4, 
 	cores=4,
 	backend='cmdstanr', 
-	threads=threading(4, static=TRUE),
+	threads=threading(2, static=TRUE),
 	control=list(adapt_delta=0.99),
 	seed=425, 
 	refresh=650
@@ -165,7 +165,7 @@ get.duplicated.data <- function(
 	return (results.with.duplicates)
 }
 
-run.simulations <- function(data, name, groups = '', ...) {
+run.simulations <- function(data, name, groups = '', priors = '', ...) {
 	cis <- data.frame(
 		model.number = integer(0),
 		effect = character(0),
@@ -175,25 +175,23 @@ run.simulations <- function(data, name, groups = '', ...) {
 		median = numeric(0)
 	)
 	
-	priors <- c(
-		set_prior('normal(0, 10)', class='Intercept'),
-		set_prior('lkj(2)', class='cor'),
-		set_prior('normal(0, 10)', class = 'b', coef=unlist(
-			sapply(
-				c(1,2,3),
-				\(i) combn(
-					c(
-						'voice.n', 
-						'data_source.n', 
-						'target_response.n'
-					),
-					m=i,
-					FUN=\(x) paste(x, collapse=':')
+	if (all(priors == '')) {
+		priors <- c(
+			set_prior('normal(0, 10)', class='Intercept'),
+			set_prior('lkj(2)', class='cor'),
+			set_prior('normal(0, 10)', class = 'b', coef=unlist(
+				sapply(
+					c(1,2,3),
+					\(i) combn(
+						groups,
+						m=i,
+						FUN=\(x) paste(x, collapse=':')
+					)
 				)
-			)
-		)),
-		set_prior('normal(0, 10)', class = 'sd')
-	)
+			)),
+			set_prior('normal(0, 10)', class = 'sd')
+		)
+	}
 	
 	human.subject.ids <- data |>
 		filter(data_source == 'human') |>
@@ -266,7 +264,7 @@ run.simulations <- function(data, name, groups = '', ...) {
 		
 		save_model_summaries(
 			models,
-			filename=sprintf(paste0(name, '_summaries_%02d_hp.txt'), n.participants), 
+			filename=file.path(models.dir, sprintf(paste0(name, '_summaries_%02d_hp.txt'), n.participants)), 
 			overwrite=TRUE
 		)
 	}
@@ -342,11 +340,10 @@ save.ci.plots <- function(cis, name) {
 
 save.ci.summary <- function(cis, name) {
 	write.csv(cis, file.path(models.dir, paste0(name, '_simulations_cis.csv')), row.names=FALSE)
+	
 	cis.summary <- cis |> 
 		group_by(effect, n.humans, `Overlaps 0?`, width) |>
 		summarize(pr.of.runs.in.group = n()/N_RUNS_PER_SIZE)
 	
-	sink(file.path(models.dir, paste0(name, '_simulations_cis_summary.txt')))
-	cis.summary
-	sink()
+	write.csv(cis.summary, file.path(models.dir, paste0(name, '_simulations_cis_summary.csv')), row.names=FALSE)
 }
