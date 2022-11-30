@@ -57,12 +57,29 @@ if (file.exists(file.path(freq.results.dir, 'original_model.rds'))) {
 	saveRDS(model.freq, file.path(freq.results.dir, 'original_model.rds'))
 }
 
+priors <- c(
+			set_prior('normal(0, 10)', class='Intercept'),
+			set_prior('lkj(2)', class='cor'),
+			set_prior('normal(0, 10)', class = 'b', coef=unlist(
+				sapply(
+					c(1,2,3),
+					\(i) combn(
+						c('voice.n', 'data_source.n', 'target_response.n'),
+						m=i,
+						FUN=\(x) paste(x, collapse=':')
+					)
+				)
+			)),
+			set_prior('normal(0, 10)', class = 'sd')
+		)
+
 model.bayes <- brm(
 	data = results,
 	formula = correct ~ voice.n * data_source.n * target_response.n +
 		(1 + voice.n * target_response.n | subject:data_source.n) +
 		(1 + data_source.n | item:voice.n:target_response.n),
 	family = bernoulli(),
+	prior = priors,
 	# 650 is the minimum amount required to get good Rhats.
 	# we want more for the actual models, but for simulations
 	# it's too expensive
