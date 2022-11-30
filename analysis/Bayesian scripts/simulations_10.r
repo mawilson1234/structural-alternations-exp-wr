@@ -33,8 +33,16 @@ beta_ci <- function(y, ci=0.95) {
 
 results <- read.csv('accuracy-data.csv')
 
-freq.results.dir <- file.path('Models', 'Frequentist simulations')
-bayes.results.dir <- file.path('Models', 'Bayesian simulations')
+original.human.subjects <- (results |>
+	filter(data_source == 'human') |>
+	pull(subject) |>
+	unique())[seq_len(10)]
+
+results <- results |>
+	filter(subject %in% original.human.subjects | data_source == 'BERT')
+
+freq.results.dir <- file.path('Models', 'Frequentist simulations', '10 subjects')
+bayes.results.dir <- file.path('Models', 'Bayesian simulations', '10 subjects')
 dir.create(freq.results.dir, showWarnings = FALSE, recursive = TRUE)
 dir.create(bayes.results.dir, showWarnings = FALSE, recursive = TRUE)
 

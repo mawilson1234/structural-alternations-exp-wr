@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=salts_exp_simulations
+#SBATCH --job-name=salts_exp_simulations-10
 #SBATCH --output=joblogs/%x_%j.txt
 #SBATCH --nodes=1
 #SBATCH --ntasks=4
@@ -12,8 +12,8 @@
 
 module load R/4.1.0-foss-2020b
 
-echo Running script: scripts/simulations.sh
+echo Running script: scripts/simulations_10.sh
 
 cd analysis/
 
-Rscript Bayesian\ scripts/simulations.r
+Rscript Bayesian\ scripts/simulations_10.r
