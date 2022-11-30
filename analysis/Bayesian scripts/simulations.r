@@ -63,7 +63,10 @@ model.bayes <- brm(
 		(1 + voice.n * target_response.n | subject:data_source.n) +
 		(1 + data_source.n | item:voice.n:target_response.n),
 	family = bernoulli(),
-	iter = 2000,
+	# 650 is the minimum amount required to get good Rhats.
+	# we want more for the actual models, but for simulations
+	# it's too expensive
+	iter = 650, 
 	chains = 4,
 	cores = 4,
 	refresh = 0,
@@ -235,7 +238,10 @@ simulate.n.times.with.group.sizes <- function(
 	
 	dir.create(results.dir, showWarnings = FALSE, recursive = TRUE)
 	
-	n.digits <- length(as.character(n.times))
+	n.digits.hp <- max(length(as.character(group.sizes)))
+	n.digits.i <- length(as.character(n.times))
+	
+	format_string <- paste0('%s_%0', n.digits.hp, 'd_hp_%0', n.digits.i, 'd.rds')
 	
 	coefs <- ldply(
 		group.sizes,
@@ -247,7 +253,7 @@ simulate.n.times.with.group.sizes <- function(
 					df <- simulate.with.n.subjects(
 							model = model, 
 							n.subjects.per.group = x, 
-							file.name = file.path(results.dir, sprintf('%s_%02d_hp_%02d.rds', file.name.prefix, x, i)), 
+							file.name = file.path(results.dir, sprintf(format_string, file.name.prefix, x, i)), 
 							save.model = save.all
 						) |>
 						mutate(
