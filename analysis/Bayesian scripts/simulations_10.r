@@ -361,7 +361,7 @@ simulate.n.times.with.group.sizes <- function(
 }
 
 n.times <- 1000
-group.sizes <- c(30, 35, 40, 50)
+group.sizes <- c(20, 30, 40, 50)
 
 freq.coefs <- simulate.n.times.with.group.sizes(
 	model = model.freq,
