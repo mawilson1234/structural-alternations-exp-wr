@@ -256,9 +256,9 @@ simulate.n.times.with.group.sizes <- function(
 	save.all = FALSE
 ) {
 	if (class(model) == 'glmerMod') {
-		results.dir <- file.path('Models', 'Frequentist simulations', '10 subjects')
+		results.dir <- freq.results.dir
 	} else if (class(model) == 'brmsfit') {
-		results.dir <- file.path('Models', 'Bayesian simulations', '10 subjects')
+		results.dir <- bayes.results.dir
 	}
 	
 	dir.create(results.dir, showWarnings = FALSE, recursive = TRUE)
