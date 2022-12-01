@@ -3,6 +3,7 @@ library(plyr)
 library(lme4)
 library(brms)
 library(doRNG)
+library(foreach)
 library(ggplot2)
 library(lmerTest)
 library(doFuture)
@@ -256,9 +257,9 @@ simulate.n.times.with.group.sizes <- function(
 	save.all = FALSE
 ) {
 	if (class(model) == 'glmerMod') {
-		results.dir <- freq.results.dir
+		results.dir <- file.path('Models', 'Frequentist simulations', '10 subjects')
 	} else if (class(model) == 'brmsfit') {
-		results.dir <- bayes.results.dir
+		results.dir <- file.path('Models', 'Bayesian simulations', '10 subjects')
 	}
 	
 	dir.create(results.dir, showWarnings = FALSE, recursive = TRUE)
@@ -268,33 +269,24 @@ simulate.n.times.with.group.sizes <- function(
 	
 	format_string <- paste0('%s_%0', n.digits.hp, 'd_hp_%0', n.digits.i, 'd.rds')
 	
-	coefs <- ldply(
-		group.sizes,
-		\(x) {
-			p <- progressor(along = seq_len(n.times))
-			ldply(
-				seq_len(n.times),
-				\(i) {
-					df <- simulate.with.n.subjects(
-							model = model, 
-							n.subjects.per.group = x, 
-							file.name = file.path(results.dir, sprintf(format_string, file.name.prefix, x, i)), 
-							save.model = save.all
-						) |>
-						mutate(
-							n.subjects.per.group = x,
-							run.no = i
-						)
-						
-					p(sprintf("i=%g, n.participants=%g", i, x))
-					
-					return (df)
-				},
-				.parallel = TRUE
-			)
-		},
-		.parallel = TRUE
-	)
+	coefs <- foreach(x = group.sizes, .combine=rbind) %do% {
+		p <- progressor(along = seq_len(n.times))
+		res <- foreach(i = seq_len(n.times), .combine=rbind) %dorng% {
+			df <- simulate.with.n.subjects(
+					model = model, 
+					n.subjects.per.group = x, 
+					file.name = file.path(results.dir, sprintf(format_string, file.name.prefix, x, i)), 
+					save.model = save.all
+				) |>
+				mutate(
+					n.subjects.per.group = x,
+					run.no = i
+				)
+			p(sprintf("i=%g, n.participants=%g", i, x))	
+			return (df)
+		}
+		return (res)
+	}
 	
 	write.csv(coefs, file.path(results.dir, 'sim_coefs.csv'), row.names = FALSE)
 	
@@ -382,7 +374,7 @@ group.sizes <- c(20, 30, 40, 50)
 
 freq.coefs <- simulate.n.times.with.group.sizes(
 	model = model.freq,
-	n.times = n.times,
+	n.times = 1,
 	group.sizes = group.sizes,
 	file.name.prefix = 'crossed_model_accuracy',
 	save.all = TRUE

@@ -3,6 +3,7 @@ library(plyr)
 library(lme4)
 library(brms)
 library(doRNG)
+library(foreach)
 library(ggplot2)
 library(lmerTest)
 library(doFuture)
@@ -260,33 +261,24 @@ simulate.n.times.with.group.sizes <- function(
 	
 	format_string <- paste0('%s_%0', n.digits.hp, 'd_hp_%0', n.digits.i, 'd.rds')
 	
-	coefs <- ldply(
-		group.sizes,
-		\(x) {
-			p <- progressor(along = seq_len(n.times))
-			ldply(
-				seq_len(n.times),
-				\(i) {
-					df <- simulate.with.n.subjects(
-							model = model, 
-							n.subjects.per.group = x, 
-							file.name = file.path(results.dir, sprintf(format_string, file.name.prefix, x, i)), 
-							save.model = save.all
-						) |>
-						mutate(
-							n.subjects.per.group = x,
-							run.no = i
-						)
-						
-					p(sprintf("i=%g, n.participants=%g", i, x))
-					
-					return (df)
-				},
-				.parallel = TRUE
-			)
-		},
-		.parallel = TRUE
-	)
+	coefs <- foreach(x = group.sizes, .combine=rbind) %do% {
+		p <- progressor(along = seq_len(n.times))
+		res <- foreach(i = seq_len(n.times), .combine=rbind) %dorng% {
+			df <- simulate.with.n.subjects(
+					model = model, 
+					n.subjects.per.group = x, 
+					file.name = file.path(results.dir, sprintf(format_string, file.name.prefix, x, i)), 
+					save.model = save.all
+				) |>
+				mutate(
+					n.subjects.per.group = x,
+					run.no = i
+				)
+			p(sprintf("i=%g, n.participants=%g", i, x))	
+			return (df)
+		}
+		return (res)
+	}
 	
 	write.csv(coefs, file.path(results.dir, 'sim_coefs.csv'), row.names = FALSE)
 	
