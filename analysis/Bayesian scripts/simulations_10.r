@@ -10,10 +10,17 @@ suppressMessages(library(doFuture))
 suppressMessages(library(parallel))
 suppressMessages(library(gridExtra))
 suppressMessages(library(tidyverse))
+suppressMessages(library(RhpcBLASctl))
+
+blas_set_num_threads(1)
 
 registerDoFuture()
 registerDoRNG()
-n.cores <- detectCores()
+n.cores <- as.numeric(Sys.getenv("SLURM_CPUS_PER_TASK"))
+if (is.na(n.cores)) {
+	n.cores <- 1
+}
+
 cat(sprintf('Using %d cores\n', n.cores))
 plan(multicore, workers = n.cores)
 
@@ -212,11 +219,19 @@ simulate.with.n.subjects <- function(
 			select(param, everything()) |>
 			mutate(sig = `Pr(>|z|)` < 0.05)	
 	} else if (class(model) == 'brmsfit') {
+		update.args <- list(
+			object = model,
+			newdata = sim.data,
+			silent = 2,
+			refresh = 0,
+			threads = threading(1, static = TRUE)
+		)
+
 		if (save.model) {
-			new.model <- update(model, newdata = sim.data, file = file.name, silent = 2, refresh = 0)
-		} else {
-			new.model <- update(model, newdata = sim.data)
+			update.args <- append(update.args, list(file = file.name))
 		}
+		
+		new.model <- do.call(update, update.args)
 		
 		pmcmcs <- posterior_samples(new.model) |>
 			select(starts_with('b_')) |>
@@ -265,8 +280,7 @@ simulate.n.times.with.group.sizes <- function(
 	dir.create(results.dir, showWarnings = FALSE, recursive = TRUE)
 	
 	n.digits.hp <- max(length(as.character(group.sizes)))
-	n.digits.i <- length(as.character(n.times))
-	
+	n.digits.i <- nchar(as.character(n.times))
 	format_string <- paste0('%s_%0', n.digits.hp, 'd_hp_%0', n.digits.i, 'd.rds')
 	
 	coefs <- foreach(x = group.sizes, .combine=rbind) %do% {
