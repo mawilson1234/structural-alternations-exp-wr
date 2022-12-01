@@ -353,6 +353,10 @@ simulate.n.times.with.group.sizes <- function(
 		scale = 1.1,
 		units = 'in'
 	)
+	# marrangeGrob creates a blank file
+	if (file.exists('Rplots.pdf')) {
+		unlink('Rplots.pdf')
+	}
 	
 	return (coefs)
 }

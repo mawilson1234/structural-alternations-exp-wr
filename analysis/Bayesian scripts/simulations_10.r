@@ -361,6 +361,10 @@ simulate.n.times.with.group.sizes <- function(
 		scale = 1.1,
 		units = 'in'
 	)
+	# marrangeGrob creates a blank file
+	if (file.exists('Rplots.pdf')) {
+		unlink('Rplots.pdf')
+	}
 	
 	return (coefs)
 }
@@ -371,7 +375,7 @@ group.sizes <- c(20, 30, 40, 50)
 cat('Simulating frequentist models\n')
 freq.coefs <- simulate.n.times.with.group.sizes(
 	model = model.freq,
-	n.times = 2,
+	n.times = n.times,
 	group.sizes = group.sizes,
 	file.name.prefix = 'crossed_model_accuracy',
 	save.all = TRUE
