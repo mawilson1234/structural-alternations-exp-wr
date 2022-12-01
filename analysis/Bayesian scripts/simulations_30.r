@@ -13,7 +13,9 @@ suppressMessages(library(tidyverse))
 
 registerDoFuture()
 registerDoRNG()
-plan(multicore, workers = detectCores())
+n.cores <- detectCores()
+cat(sprintf('Using %d cores', n.cores))
+plan(multicore, workers = n.cores
 
 beta_ci <- function(y, ci=0.95) {
 	alpha <- sum(y) + 1
@@ -35,7 +37,7 @@ bayes.results.dir <- file.path('Models', 'Bayesian simulations', '30 subjects')
 dir.create(freq.results.dir, showWarnings = FALSE, recursive = TRUE)
 dir.create(bayes.results.dir, showWarnings = FALSE, recursive = TRUE)
 
-cat('Getting original frequentist model')
+cat('Getting original frequentist model\n')
 if (file.exists(file.path(freq.results.dir, 'original_model.rds'))) {
 	model.freq <- readRDS(file.path(freq.results.dir, 'original_model.rds'))
 } else {
@@ -71,7 +73,7 @@ priors <- c(
 			set_prior('normal(0, 10)', class = 'sd')
 		)
 
-cat('Getting original Bayesian model')
+cat('Getting original Bayesian model\n')
 model.bayes <- brm(
 	data = results,
 	formula = correct ~ voice.n * data_source.n * target_response.n +
