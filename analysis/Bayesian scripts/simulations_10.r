@@ -14,7 +14,7 @@ suppressMessages(library(tidyverse))
 registerDoFuture()
 registerDoRNG()
 n.cores <- detectCores()
-cat(sprintf('Using %d cores', n.cores))
+cat(sprintf('Using %d cores\n', n.cores))
 plan(multicore, workers = n.cores)
 
 beta_ci <- function(y, ci=0.95) {
