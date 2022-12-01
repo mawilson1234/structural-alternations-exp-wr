@@ -226,7 +226,7 @@ simulate.with.n.subjects <- function(
 			refresh = 0,
 			threads = threading(1, static = TRUE)
 		)
-
+		
 		if (save.model) {
 			update.args <- append(update.args, list(file = file.name))
 		}
