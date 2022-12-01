@@ -9,15 +9,11 @@ suppressMessages(library(lmerTest))
 suppressMessages(library(doFuture))
 suppressMessages(library(parallel))
 suppressMessages(library(gridExtra))
-suppressMessages(library(progressr))
 suppressMessages(library(tidyverse))
 
 registerDoFuture()
 registerDoRNG()
 plan(multicore, workers = detectCores())
-
-handlers(global = TRUE)
-handlers('progress')
 
 beta_ci <- function(y, ci=0.95) {
 	alpha <- sum(y) + 1
@@ -272,7 +268,6 @@ simulate.n.times.with.group.sizes <- function(
 	format_string <- paste0('%s_%0', n.digits.hp, 'd_hp_%0', n.digits.i, 'd.rds')
 	
 	coefs <- foreach(x = group.sizes, .combine=rbind) %do% {
-		p <- progressor(along = seq_len(n.times))
 		res <- foreach(i = seq_len(n.times), .combine=rbind) %dorng% {
 			df <- simulate.with.n.subjects(
 					model = model, 
@@ -283,8 +278,7 @@ simulate.n.times.with.group.sizes <- function(
 				mutate(
 					n.subjects.per.group = x,
 					run.no = i
-				)
-			p(sprintf("i=%g, n.participants=%g", i, x))	
+				)	
 			return (df)
 		}
 		return (res)
