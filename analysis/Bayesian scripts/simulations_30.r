@@ -1,16 +1,16 @@
 # simulations
-library(plyr)
-library(lme4)
-library(brms)
-library(doRNG)
-library(foreach)
-library(ggplot2)
-library(lmerTest)
-library(doFuture)
-library(parallel)
-library(gridExtra)
-library(progressr)
-library(tidyverse)
+suppressMessages(library(plyr))
+suppressMessages(library(lme4))
+suppressMessages(library(brms))
+suppressMessages(library(doRNG))
+suppressMessages(library(foreach))
+suppressMessages(library(ggplot2))
+suppressMessages(library(lmerTest))
+suppressMessages(library(doFuture))
+suppressMessages(library(parallel))
+suppressMessages(library(gridExtra))
+suppressMessages(library(progressr))
+suppressMessages(library(tidyverse))
 
 registerDoFuture()
 registerDoRNG()
@@ -39,6 +39,7 @@ bayes.results.dir <- file.path('Models', 'Bayesian simulations', '30 subjects')
 dir.create(freq.results.dir, showWarnings = FALSE, recursive = TRUE)
 dir.create(bayes.results.dir, showWarnings = FALSE, recursive = TRUE)
 
+cat('Getting original frequentist model')
 if (file.exists(file.path(freq.results.dir, 'original_model.rds'))) {
 	model.freq <- readRDS(file.path(freq.results.dir, 'original_model.rds'))
 } else {
@@ -74,6 +75,7 @@ priors <- c(
 			set_prior('normal(0, 10)', class = 'sd')
 		)
 
+cat('Getting original Bayesian model')
 model.bayes <- brm(
 	data = results,
 	formula = correct ~ voice.n * data_source.n * target_response.n +
@@ -364,6 +366,7 @@ simulate.n.times.with.group.sizes <- function(
 n.times <- 1000
 group.sizes <- c(30, 35, 40, 50)
 
+cat('Simulating frequentist models\n')
 freq.coefs <- simulate.n.times.with.group.sizes(
 	model = model.freq,
 	n.times = n.times,
@@ -372,6 +375,7 @@ freq.coefs <- simulate.n.times.with.group.sizes(
 	save.all = TRUE
 )
 
+cat('Simulating Bayesian models\n')
 bayes.coefs <- simulate.n.times.with.group.sizes(
 	model = model.bayes,
 	n.times = n.times,
