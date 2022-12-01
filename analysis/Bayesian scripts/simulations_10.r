@@ -374,7 +374,7 @@ group.sizes <- c(20, 30, 40, 50)
 
 freq.coefs <- simulate.n.times.with.group.sizes(
 	model = model.freq,
-	n.times = 1,
+	n.times = n.times,
 	group.sizes = group.sizes,
 	file.name.prefix = 'crossed_model_accuracy',
 	save.all = TRUE
