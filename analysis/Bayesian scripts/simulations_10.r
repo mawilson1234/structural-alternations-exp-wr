@@ -279,7 +279,7 @@ simulate.n.times.with.group.sizes <- function(
 	
 	dir.create(results.dir, showWarnings = FALSE, recursive = TRUE)
 	
-	n.digits.hp <- max(length(as.character(group.sizes)))
+	n.digits.hp <- max(nchar(as.character(group.sizes)))
 	n.digits.i <- nchar(as.character(n.times))
 	format_string <- paste0('%s_%0', n.digits.hp, 'd_hp_%0', n.digits.i, 'd.rds')
 	
