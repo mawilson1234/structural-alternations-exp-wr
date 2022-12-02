@@ -723,7 +723,8 @@ accuracy.data <- exp |>
 				droplevels() |>
 				mutate(word_sentence = paste(word, sentence)) |>
 				pull(word_sentence)
-		)
+		),
+		subject != 40, # excessive break time
 	) |>
 	select(
 		-word, -args_group, -mouse, -correct.pre.training,
