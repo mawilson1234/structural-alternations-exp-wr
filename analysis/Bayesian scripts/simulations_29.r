@@ -377,7 +377,7 @@ simulate.n.times.with.group.sizes <- function(
 }
 
 n.times <- 1000
-group.sizes <- c(30, 40, 50, 60)
+group.sizes <- c(29, 40, 50, 60)
 
 cat('Simulating frequentist models\n')
 freq.coefs <- simulate.n.times.with.group.sizes(
