@@ -10,6 +10,7 @@ library(reticulate)
 # do not change these
 SUBJECTS_RUN_WITH_BAD_DELAY <- 4:9
 MAX_RT_IN_SECONDS <- 10
+MAX_BREAKTIME_IN_SECONDS <- 15 * 60 # 15 minutes
 OUTLIER_RT_SDS <- 2
 
 current.exp <- 'wr'
@@ -99,6 +100,10 @@ breaktimes <- results |>
 		)
 	) |>
 	select(subject, break_number, break_time, duration)
+
+excessive.breaktimes <- breaktimes |>
+	filter(duration > MAX_BREAKTIME_IN_SECONDS * 1000) |>
+	droplevels()
 
 # training first choice accuracy by half
 # for some subjects, this is inaccurate due to
@@ -532,6 +537,7 @@ all.excluded.subjects <- c(
 		as.numeric(as.character(less.than.90.on.training$subject)),
 		as.numeric(as.character(less.than.75.on.fillers$subject)),
 		as.numeric(as.character(not.above.chance.on.training.str$subject)),
+		as.numeric(as.character(excessive.breaktimes$subject)),
 		as.numeric(as.character(purely.linear.by.arguments.both$subject))
 	) |> 
 	sort() |>
@@ -559,7 +565,11 @@ all.excluded.subjects <- c(
 				TRUE ~ why
 			), 
 		why = case_when(
-				subject %in% purely.linear.by.arguments.both$subject ~ paste0(why, 'n.d. from linear'),
+				subject %in% excessive.breaktimes$subject ~ paste0(why, 'break time > 15 minutes; '),
+				TRUE ~ why
+			),
+		why = case_when(
+				subject %in% purely.linear.by.arguments.both$subject ~ paste0(why, 'n.d. from linear; '),
 				TRUE ~ why
 			),
 		why = gsub('; $', '', why)
@@ -723,8 +733,7 @@ accuracy.data <- exp |>
 				droplevels() |>
 				mutate(word_sentence = paste(word, sentence)) |>
 				pull(word_sentence)
-		),
-		subject != 40, # excessive break time
+		)
 	) |>
 	select(
 		-word, -args_group, -mouse, -correct.pre.training,
