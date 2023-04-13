@@ -14,7 +14,7 @@ MAX_BREAKTIME_IN_SECONDS <- 15 * 60 # 15 minutes
 OUTLIER_RT_SDS <- 2
 
 current.exp <- 'wr'
-MOST_RECENT_SUBJECTS <- 47
+MOST_RECENT_SUBJECTS <- 59:62
 
 # confidence interval for beta distribution
 beta_ci <- function(y, ci=0.95) {
